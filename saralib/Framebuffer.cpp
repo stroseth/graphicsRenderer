@@ -1,30 +1,19 @@
-#pragma once
+#include "Framebuffer.h"
+using color = vec3;
 
-#include <vector>
-#include "vec.h"
+//default constructor: allocates 100x100 vector for storage
+Framebuffer::Framebuffer()
+    : width(100), height(100), fbStorage(width*height)
+    {
+}
 
-class Framebuffer{
-    public:
-        //default constructor is 100x100
-        Framebuffer();
-        
-        //Specify size of img
-        Framebuffer(int x, int y);
+//constructor for specific sizes
+Framebuffer::Framebuffer(int x, int y)
+    : width(x), height(y), fbStorage(width*height)
+    {
+}
 
-
-        /*TO-DO!!!!!!
-
-         //sets entire image to one color
-         void clearToColor(vec3 c);
-
-        //linear interpolation gradient func, 2 colors
-
-        //set a single pixel color
-
-        //export as png. Need filename string input
-        */
-
-    private:
-        int width, height;
-        std::vector<vec3> fbStorage; //Framebuffer is a vector of ... vectors :0
-};
+//
+Framebuffer::Framebuffer(color c)
+{
+}
