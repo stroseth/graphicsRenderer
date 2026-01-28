@@ -24,17 +24,34 @@ TEST_CASE("#1 - Dot Product")
     REQUIRE_THAT(ough, Catch::Matchers::WithinAbs(actualAnswer, eps));
 
 }
-/*
+
 TEST_CASE("#2 - Cross Product")
 {
-    idk
+    vec3 u = vec3(7,1,25);
+    vec3 v = vec3(1,27,6);
+
+    vec3 ough = cross(u,v);
+    vec3 actualAnswer = vec3(-669, -17, 188); 
+    REQUIRE(ough.e[0] == actualAnswer.e[0]);
+    REQUIRE(ough.e[1] == actualAnswer.e[1]);
+    REQUIRE(ough.e[2] == actualAnswer.e[2]);
+
 }
 
-TEST_CASE("#3 - ??? Product")
+TEST_CASE("#3 - Unit Vector")
 {
-    idk
-}
+    vec3 u = vec3(1,2,3);
+    double length = std::sqrt(14);
 
+    vec3 ough = unit_vector(u);
+    vec3 actualAnswer = vec3((1/length), (2/length), (3/length));
+ 
+    REQUIRE(ough.e[0] == actualAnswer.e[0]);
+    REQUIRE(ough.e[1] == actualAnswer.e[1]);
+    REQUIRE(ough.e[2] == actualAnswer.e[2]);
+
+}
+/* 
 TEST_CASE("#4 - ?? Product")
 {
     idk
