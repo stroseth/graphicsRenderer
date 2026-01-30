@@ -4,7 +4,6 @@
 #include <cmath>
 #include <iostream>
 
-//tests needed: dot product, cross product
 class vec3{
     public:
         double e[3];
