@@ -24,7 +24,7 @@ class Framebuffer{
         void setGradient(color c1, color c2);
 
         //Export as png. Need filename string input
-        void exportAsPNG(std::string filename){};
+        void exportAsPNG(std::string filename);
         
     private:
         int width, height;

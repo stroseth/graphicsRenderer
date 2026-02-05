@@ -30,7 +30,7 @@ void Framebuffer::setPixelColor(int i, int j, color c){
 }
 
 void Framebuffer::setPixelColor(int index, color c){
-    fbStorage[idx] = color(c.x(), c.y(), c.z());
+    fbStorage[index] = color(c.x(), c.y(), c.z());
 }
 
 
