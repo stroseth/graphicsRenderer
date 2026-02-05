@@ -1,4 +1,6 @@
 #include "Framebuffer.h"
+#include "png++/png.hpp"
+
 using color = vec3;
 
 //default constructor: allocates 100x100 vector for storage
