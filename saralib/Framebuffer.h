@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "vec.h"
+#include "vec3.h"
 
 using color = vec3;
 
@@ -25,7 +25,8 @@ class Framebuffer{
 
         //linear interpolation gradient func, 2 colors
 
-        void exportAsPNG(){};
+        void exportAsPNG();
+    
         //export as png. Need filename string input
 
     private:

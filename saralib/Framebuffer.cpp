@@ -13,7 +13,30 @@ Framebuffer::Framebuffer(int x, int y)
     {
 }
 
-//
-Framebuffer::Framebuffer(color c)
+// do you want this constructor??
+// Commented out since it doesn't exist in header
+// 
+// Framebuffer::Framebuffer(color c)
+// {
+// }
+
+void Framebuffer::clearToColor(color c)
+{
+}
+
+
+//set a single pixel color
+void Framebuffer::setPixelColor(int i, int j, color c)
+{
+}
+
+void Framebuffer::setPixelColor(int index, color c)
+{
+}
+
+
+        //linear interpolation gradient func, 2 colors
+
+void Framebuffer::exportAsPNG()
 {
 }
