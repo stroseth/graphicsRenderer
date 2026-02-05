@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "vec.h"
+#include "vec3.h"
 
 using color = vec3;
 
@@ -13,22 +13,20 @@ class Framebuffer{
         //Specify size of img
         Framebuffer(int x, int y);
 
+        //Clears entire image to one color
+        void clearToColor(color c);
 
-        //TO-DO!!!!!!
-
-         //sets entire image to one color
-         void clearToColor(color c);
-
-        //set a single pixel color
+        //Set a single pixel color
         void setPixelColor(int i, int j, color c);
         void setPixelColor(int index, color c);
 
         //linear interpolation gradient func, 2 colors
+        void setGradient(color c1, color c2);
 
-        void exportAsPNG(){};
-        //export as png. Need filename string input
-
+        //Export as png. Need filename string input
+        void exportAsPNG(std::string filename){};
+        
     private:
         int width, height;
-        std::vector<vec3> fbStorage; //Framebuffer is a vector of ... vectors :0
+        std::vector<color> fbStorage; //Framebuffer is a vector of ... vectors :0 (colors to be specific)
 };
