@@ -25,6 +25,10 @@ void Framebuffer::clearToColor(color c){
     };
 }
 
+void Framebuffer::clearToGradient(color c, color c){
+    //loop; calculate each channel and set that row to new channel color
+}
+
 void Framebuffer::setPixelColor(int i, int j, color c){
     uint idx = j * width + i; 
     setPixelColor(idx, c);

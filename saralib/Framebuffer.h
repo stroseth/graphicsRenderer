@@ -16,12 +16,12 @@ class Framebuffer{
         //Clears entire image to one color
         void clearToColor(color c);
 
+        //linear interpolation gradient func, 2 colors
+        void clearToGradient(color c1, color c2);
+
         //Set a single pixel color
         void setPixelColor(int i, int j, color c);
         void setPixelColor(int index, color c);
-
-        //linear interpolation gradient func, 2 colors
-        void setGradient(color c1, color c2);
 
         //Export as png. Need filename string input
         void exportAsPNG(std::string filename);
