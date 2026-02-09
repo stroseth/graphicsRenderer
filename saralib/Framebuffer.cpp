@@ -26,7 +26,8 @@ void Framebuffer::clearToColor(color c){
 }
 
 void Framebuffer::setPixelColor(int i, int j, color c){
-    ///Need to implement!
+    uint idx = j * width + i; 
+    setPixelColor(idx, c);
 }
 
 void Framebuffer::setPixelColor(int index, color c){
@@ -42,7 +43,12 @@ void Framebuffer::exportAsPNG(std::string filename){
         size_t x = idx % w;
         size_t y = static_cast<size_t>( floor(idx / static_cast<float>(imData.get_width())) );
 
-        imData[y][x] = png::rgb_pixel(fbStorage[idx].x(),fbStorage[idx].y(),fbStorage[idx].z());
+        //converts float val to int 0-255
+        int redVal = round(fbStorage[idx].x() * 255);
+        int blueVal = round(fbStorage[idx].y() * 255);
+        int greenVal = round(fbStorage[idx].z() * 255);
+
+        imData[y][x] = png::rgb_pixel(redVal,blueVal,greenVal);
     }
     imData.write(filename);
 }
