@@ -25,7 +25,7 @@ void Framebuffer::clearToColor(color c){
     };
 }
 
-void Framebuffer::clearToGradient(color c, color c){
+void Framebuffer::clearToGradient(color c1, color c2){
     //loop; calculate each channel and set that row to new channel color
 }
 

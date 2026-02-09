@@ -4,6 +4,7 @@ add_library (saralib
     vec3.h
     Framebuffer.h
     Framebuffer.cpp
+    ray.h
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 
