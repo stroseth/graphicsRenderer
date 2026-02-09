@@ -31,7 +31,7 @@ TEST_CASE("#2 - Cross Product")
 TEST_CASE("#3 - Unit Vector")
 {
     vec3 u = vec3(1,2,3);
-    double length = std::sqrt(14);
+    float length = std::sqrt(14);
 
     vec3 ough = unit_vector(u);
     vec3 actualAnswer = vec3((1/length), (2/length), (3/length));
@@ -45,7 +45,7 @@ TEST_CASE("#3 - Unit Vector")
 TEST_CASE("#4 - Constructors")
 {
     vec3 u = vec3(1,2,3);
-    vec3 v = vec3(-19,4,403.3);
+    vec3 v = vec3(-19,4,403.3f);
 
     //There is definitely a better way to do this. I don't know why I'm doing it like this. shrug
     REQUIRE(u.x()== 1);
@@ -54,7 +54,7 @@ TEST_CASE("#4 - Constructors")
     
     REQUIRE(v.e[0] == -19);
     REQUIRE(v.e[1] == 4);
-    REQUIRE(v.e[2] == 403.3);
+    REQUIRE(v.e[2] == 403.3f);
 
     vec3 defaultCons = vec3();
 
@@ -66,20 +66,20 @@ TEST_CASE("#4 - Constructors")
 TEST_CASE("#5 - Operators")
 {
     vec3 u = vec3(9,-5,6);
-    vec3 v = vec3(0,2.2,7);
+    vec3 v = vec3(0,2.2f,7);
 
     vec3 oughAdd = u + v;
     vec3 oughSub = u - v;
     vec3 oughMult = u * v;
     vec3 oughDiv = u/2;
     
-    vec3 actAdd = vec3(9,-2.8,13);
+    vec3 actAdd = vec3(9,-2.8f,13);
     REQUIRE(oughAdd.e[0] == actAdd.e[0]);
     REQUIRE(oughAdd.e[1] == actAdd.e[1]);
     REQUIRE(oughAdd.e[2] == actAdd.e[2]);
 
 
-    vec3 actSub = vec3(9,-7.2,-1);
+    vec3 actSub = vec3(9,-7.2f,-1);
     REQUIRE(oughSub.e[0] == actSub.e[0]);
     REQUIRE(oughSub.e[1] == actSub.e[1]);
     REQUIRE(oughSub.e[2] == actSub.e[2]);
@@ -91,7 +91,7 @@ TEST_CASE("#5 - Operators")
     REQUIRE(oughMult.e[2] == actMult.e[2]);
 
 
-    vec3 actDiv = vec3(4.5, -2.5, 3);
+    vec3 actDiv = vec3(4.5f, -2.5f, 3);
     REQUIRE(oughDiv.e[0] == actDiv.e[0]);
     REQUIRE(oughDiv.e[1] == actDiv.e[1]);
     REQUIRE(oughDiv.e[2] == actDiv.e[2]);
