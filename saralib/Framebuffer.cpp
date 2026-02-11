@@ -25,8 +25,19 @@ void Framebuffer::clearToColor(color c){
     };
 }
 
-void Framebuffer::clearToGradient(color c1, color c2){
-    //loop; calculate each channel and set that row to new channel color
+void Framebuffer::clearToGradient(color c0, color c1){
+  for (auto x=0; x<width; x++) {
+    for (auto y=0; y<height; y++) {
+      
+      float t = y / (float)height;
+  
+      // need to loop over and lerp here... (pretty sure it do tho)
+      color c2 = c0 * (1-t) + c1 * t;
+  
+      int idx = y * width + x;
+      fbStorage[idx] = c2;
+    }
+  }
 }
 
 void Framebuffer::setPixelColor(int i, int j, color c){
