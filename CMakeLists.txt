@@ -82,18 +82,18 @@ find_package(glm CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 
 # not using Vulkan at the moment
-# find_package(Vulkan)
+# find_package(Vulkan OPTIONAL)
 
 # Add the src directory to build the library.
 add_subdirectory(src)
-
-# Add my renderlib
-# add_subdirectory(renderlib)
 
 # Some examples
 add_subdirectory(examples)
 
 #
+# Renderer code
+add_subdirectory(saralib)
+
 # OpenGL Example
 #
 # This builds a simple OpenGL example that you can use to get started with OpenGL.
