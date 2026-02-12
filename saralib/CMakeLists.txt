@@ -2,9 +2,10 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 add_library (saralib
     vec3.h
-    Framebuffer.h
-    Framebuffer.cpp
+    Framebuffer.h Framebuffer.cpp
     ray.h
+    Camera.h Camera.cpp 
+    PerspectiveCamera.h PerspectiveCamera.cpp
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 
