@@ -8,8 +8,7 @@ public:
   PerspectiveCamera();
   PerspectiveCamera(int pixel_nx, int pixel_ny);
 
-  // you do need this...
-  // PerspectiveCamera( vec3 origin, vec3 viewdir, float focallength, ...)
+  PerspectiveCamera(vec3 origin , vec3 viewdir , float focalLength , float imagePlaneWidth , int pixel_nx, int pixel_ny);
 
   ray generateRay( int i, int j ) override
   {
