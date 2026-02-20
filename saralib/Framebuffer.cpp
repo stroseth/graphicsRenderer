@@ -63,7 +63,7 @@ void Framebuffer::exportAsPNG(std::string filename){
         int blueVal = round(fbStorage[idx].y() * 255);
         int greenVal = round(fbStorage[idx].z() * 255);
 
-        imData[y][x] = png::rgb_pixel(redVal,blueVal,greenVal);
+        imData[height-1-y][x] = png::rgb_pixel(redVal,blueVal,greenVal);
     }
     imData.write(filename);
 }

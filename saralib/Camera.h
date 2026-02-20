@@ -8,7 +8,7 @@ class Camera{
         //default camera
         Camera(); // default pixel img dimensions are 100x100
         Camera(int pixel_nx, int pixel_ny); //input pixel image dimensions
-
+        Camera(vec3 origin , vec3 viewdir , float focalLength , float imagePlaneWidth , int pixel_nx, int pixel_ny);
         virtual ray generateRay(int i, int j) = 0;
 
     protected:

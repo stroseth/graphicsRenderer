@@ -15,15 +15,18 @@ int main(int argc , char* argv []) {
     fb1.exportAsPNG("HopefullyAGradient.png");
     */
 
-    Framebuffer fb{800,800};
+    Framebuffer fb{200,200};
     //fb.clearToColor(blue);
     
+    vec3 org = {20,10,5};
+    vec3 view = {4,-2,7};
+    float focal = .25f;
+    float widHeight = .5f;
+
     // set default cam variables here
-    PerspectiveCamera p = PerspectiveCamera(800, 800);
-    // PerspectiveCamera p( origin , viewdir , focalLength ,
-    // imagePlaneWidth , fb.width(), fb.height () );
-    for (int x=0; x <800; ++x) {
-        for (int y=0; y <800; ++y) {
+    PerspectiveCamera p = PerspectiveCamera( org , view , focal ,widHeight , 200, 200 );
+    for (int x=0; x <200; ++x) {
+        for (int y=0; y <200; ++y) {
             ray r = p.generateRay(x, y);
             color ray_dir_color = unit_vector(r.direction());
             ray_dir_color = (ray_dir_color + vec3(1,1,1)) * 0.5;
