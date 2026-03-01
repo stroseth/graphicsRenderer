@@ -7,6 +7,7 @@ add_library (saralib
     Camera.h Camera.cpp 
     PerspectiveCamera.h PerspectiveCamera.cpp
     Shape.h
+    HitStruct.h 
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 
