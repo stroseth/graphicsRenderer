@@ -12,9 +12,9 @@ Camera::Camera(int pixel_nx, int pixel_ny)
       nx(pixel_nx), ny(pixel_ny)
 {}
 
-Camera::Camera(vec3 origin , vec3 viewdir , float focalLen , float imagePlaneWidth, int pixel_nx, int pixel_ny) 
+Camera::Camera(vec3 origin , vec3 viewdir , float focalLen , float imagePlaneWidth, float imagePlaneHeight, int pixel_nx, int pixel_ny) 
     : pos(origin), focalLength(focalLen),
-      imagePlane_width(imagePlaneWidth),
+      imagePlane_width(imagePlaneWidth), imagePlane_height(imagePlaneHeight),
       nx(pixel_nx), ny(pixel_ny)
 {
      vec3 b = {0,1,0};
