@@ -17,16 +17,16 @@ bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) 
     float discriminant = B*B - 4*(A-C);
 
     //if discriminant is less than zero, ray misses the sphere
-    if discriminant < 0 return false;
+    if (discriminant < 0) return false;
 
     //calculate t values
     float sqrtDiscriminant = std::sqrt(discriminant);
 
-    float t1 = ((-1*B) - sqrtDiscriminant)/2A;
-    float t2 = ((-1*B) + sqrtDiscriminant)/2A;
+    float t1 = ((-1*B) - sqrtDiscriminant)/(2*A);
+    float t2 = ((-1*B) + sqrtDiscriminant)/(2*A);
 
     //handle t values
-    if (t1 > t_min) && (t1 < t_max){
+    if ((t1 > t_min) && (t1 < t_max)){
         t_max = t1;
         hit.t = t1;
         hit.point = r.at(t1);
@@ -34,7 +34,7 @@ bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) 
         return true;
     }
 
-    if (t2 > t_min) && (t2 < t_max){
+    if ((t2 > t_min) && (t2 < t_max)){
         t_max = t2;
         hit.t = t2;
         hit.point = r.at(t2);

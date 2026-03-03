@@ -24,7 +24,7 @@ int main(int argc , char* argv []) {
     float widHeight = .5f;
 
     // set default cam variables here
-    PerspectiveCamera p = PerspectiveCamera( org , view , focal ,widHeight , 200, 200 );
+    PerspectiveCamera p = PerspectiveCamera( org , view , focal ,widHeight , widHeight, 200, 200 );
     for (int x=0; x <200; ++x) {
         for (int y=0; y <200; ++y) {
             ray r = p.generateRay(x, y);

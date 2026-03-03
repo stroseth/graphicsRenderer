@@ -17,4 +17,4 @@ class Sphere : public Shape
         vec3 center;
         float radius;
         vec3 color;
-}
+};
