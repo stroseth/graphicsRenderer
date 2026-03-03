@@ -28,3 +28,23 @@ TEST_CASE("Sphere Constructors"){
     REQUIRE_THAT(s1.getCenter().z(), Catch::Matchers::WithinAbs(-19, eps));
 
 }
+
+TEST_CASE("Intersect Tests"){
+    Sphere s(point3(1,1,1), 1.0f);
+
+    float tmin = 0.001f;
+    float tmax = std::numeric_limits<float>::infinity();
+    HitStruct h;
+
+    //miss
+    ray miss(point3(0,0,0), point3(1,0,0));
+    REQUIRE(s.intersect(miss, tmin, tmax, h) == false);
+
+    //tangent
+    ray tangent(point3(0,0,0), point3(0,2,2));
+    REQUIRE(s.intersect(tangent, tmin, tmax, h) == true);
+
+    //intersect
+    ray intersect(point3(0,0,0),point3(2,2,2));
+    REQUIRE(s.intersect(intersect, tmin, tmax, h) == true);
+}

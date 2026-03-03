@@ -7,14 +7,14 @@
 bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) const{
 
     //calculate eye minus center
-    vec3 eyeMinusCenter = r.origin() - center;
+    vec3 oc = r.origin() - center;
     
     //calculate discriminant
-    float A = dot(r.direction(), r.direction());
-    float B = dot((2*r.direction()),eyeMinusCenter);
-    float C = (dot(eyeMinusCenter, eyeMinusCenter) - (radius*radius));
+    float a = dot(r.direction(), r.direction());
+    float b = 2.0f * (dot(oc, r.direction()));
+    float c = dot(oc,oc) - radius*radius;
 
-    float discriminant = B*B - 4*(A-C);
+    float discriminant = b*b - 4*a*c;
 
     //if discriminant is less than zero, ray misses the sphere
     if (discriminant < 0) return false;
@@ -22,8 +22,8 @@ bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) 
     //calculate t values
     float sqrtDiscriminant = std::sqrt(discriminant);
 
-    float t1 = ((-1*B) - sqrtDiscriminant)/(2*A);
-    float t2 = ((-1*B) + sqrtDiscriminant)/(2*A);
+    float t1 = ((-1*b) - sqrtDiscriminant)/(2*a);
+    float t2 = ((-1*b) + sqrtDiscriminant)/(2*a);
 
     //handle t values
     if ((t1 > t_min) && (t1 < t_max)){
