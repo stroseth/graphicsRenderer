@@ -48,3 +48,12 @@ bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) 
 vec3 Sphere::getColor() const{
     return color;
 }
+
+//other getters
+float Sphere::getRadius() const{
+    return radius;
+}
+
+point3 Sphere::getCenter() const{
+    return center;
+}

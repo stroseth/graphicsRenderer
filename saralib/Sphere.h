@@ -13,8 +13,12 @@ class Sphere : public Shape
         bool intersect(const ray&r, float t_min, float& t_max, HitStruct& hit) const override;
         vec3 getColor() const override;
 
+        //getters
+        float getRadius() const;
+        point3 getCenter() const;
+
     private:
-        vec3 center;
+        point3 center;
         float radius;
         vec3 color;
 };
