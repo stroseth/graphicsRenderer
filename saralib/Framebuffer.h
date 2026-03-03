@@ -25,6 +25,10 @@ class Framebuffer{
 
         //Export as png. Need filename string input
         void exportAsPNG(std::string filename);
+
+        //width/height getters
+        int getFbWidth() const;
+        int getFbHeight() const;
         
     private:
         int width, height;
