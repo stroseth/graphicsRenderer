@@ -9,6 +9,7 @@ add_library (saralib
     Shape.h
     HitStruct.h 
     Sphere.h Sphere.cpp 
+    Triangle.h Triangle.cpp
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 
