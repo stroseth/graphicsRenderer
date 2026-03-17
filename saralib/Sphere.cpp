@@ -32,6 +32,7 @@ bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) 
         t_max = t1;
         hit.t = t1;
         hit.point = r.at(t1);
+        hit.normal = unit_vector(hit.point - center);
         hit.shape = this;
         return true;
     }
@@ -40,6 +41,7 @@ bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) 
         t_max = t2;
         hit.t = t2;
         hit.point = r.at(t2);
+        hit.normal = unit_vector(hit.point - center);
         hit.shape = this;
         return true;
     }

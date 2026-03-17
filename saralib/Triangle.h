@@ -20,8 +20,6 @@ class Triangle : public Shape{
 
     private:
         point3 vertex_a, vertex_b, vertex_c;
-
         vec3 color;
-
         std::shared_ptr<Shader> shader = nullptr;
 };
