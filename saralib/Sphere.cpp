@@ -59,3 +59,13 @@ float Sphere::getRadius() const{
 point3 Sphere::getCenter() const{
     return center;
 }
+
+//Shader getter
+std::shared_ptr<Shader> Sphere::getShader() const{
+    return shader;
+}
+
+//Shader setter
+void Sphere::setShader(std::shared_ptr<Shader> shd){
+    shader = shd;
+}

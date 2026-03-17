@@ -70,3 +70,11 @@ bool Triangle::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit
 vec3 Triangle::getColor() const {
     return color;
 }
+
+std::shared_ptr<Shader> Triangle::getShader() const{
+    return shader;
+}
+
+void Triangle::setShader(std::shared_ptr<Shader> shd){
+    shader = shd;
+}
