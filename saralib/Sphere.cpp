@@ -25,6 +25,8 @@ bool Sphere::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) 
     float t1 = ((-1*b) - sqrtDiscriminant)/(2*a);
     float t2 = ((-1*b) + sqrtDiscriminant)/(2*a);
 
+        /// check logic here
+    // find which t value is closest and then see if that's within the t_min and t_max
     //handle t values
     if ((t1 > t_min) && (t1 < t_max)){
         t_max = t1;

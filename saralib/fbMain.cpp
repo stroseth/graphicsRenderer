@@ -7,6 +7,7 @@
 #include "ray.h"
 #include "Shape.h"
 #include "Sphere.h"
+#include "Triangle.h"
 
 vec3 computeRayColor(const ray &r, const std::vector<std::shared_ptr<Shape>> &shapes)
 {
@@ -42,21 +43,18 @@ vec3 computeRayColor(const ray &r, const std::vector<std::shared_ptr<Shape>> &sh
 
 int main(int argc, char *argv[])
 {
-  Framebuffer fb(900, 600);
+  Framebuffer fb(200, 200);
 
   std::vector<std::shared_ptr<Shape>> shapes;
 
   // Default Camera: focal length = 0.7, image plane width = 0.5
-   PerspectiveCamera cam(vec3(0, 0, 0), vec3(0, 0, -1), 0.7, 0.5, 0.5, 600, 600);
-  //
-  // Yellow Sphere 1: center (0, -1.25, -7), radius 0.3
-   shapes.push_back(std::make_shared<Sphere>(vec3(.333f, 0, -2), 0.4f, vec3(1,0,0)));
-  //
-  // Blue Sphere 2: center (0, 0, -10), radius 3
-   //shapes.push_back(std::make_shared<Sphere>(vec3(0, 0, -10), 3.0f, vec3(0.149, 0.451, 0.698)));
-  
-  // Yellow Sphere 3: center (0, 0, -15), radius 5
-  //shapes.push_back(std::make_shared<Sphere>(vec3(0, 0, -15), 5.0f, vec3(0.992, 0.863, 0.239)));
+   PerspectiveCamera cam(vec3(0, 0, 0), vec3(0, 0, -1), 1.0, 0.5, 0.5, 200, 200);
+
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(-0.15f,-0.15f,-1.5f), vec3(0.15f,-0.15f,-1.5f), vec3(0.0f,0.15f,-1.5f),
+    vec3(1.0, 0.0, 0.7)));
+
+  shapes.push_back(std::make_shared<Sphere>(vec3(.33f,-.023f, -2.1f), 0.5f, vec3(0.5f, 0, 0.5f)));
 
 
 
@@ -68,7 +66,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  fb.exportAsPNG("spheres.png");
+  fb.exportAsPNG("triangle.png");
 
   return 0;
 }
