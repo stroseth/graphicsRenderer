@@ -8,6 +8,7 @@
 #include "Shape.h"
 #include "Sphere.h"
 #include "Triangle.h"
+#include "NormalShader.h"
 
 vec3 computeRayColor(const ray &r, const std::vector<std::shared_ptr<Shape>> &shapes)
 {
@@ -31,7 +32,13 @@ vec3 computeRayColor(const ray &r, const std::vector<std::shared_ptr<Shape>> &sh
   }
 
   if (hitAnything) {
-    return closestHit.shape->getColor();
+    auto shader = closestHit.shape->getShader();
+    if (shader) {
+      return shader->rayColor(closestHit);
+    } else {
+      NormalShader defaultShader;
+      return defaultShader.rayColor(closestHit);
+    }
   }
 
   // Background color
@@ -66,7 +73,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  fb.exportAsPNG("triangle.png");
+  fb.exportAsPNG("shadeTriangel.png");
 
   return 0;
 }

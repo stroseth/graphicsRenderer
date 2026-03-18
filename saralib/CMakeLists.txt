@@ -11,6 +11,7 @@ add_library (saralib
     Sphere.h Sphere.cpp 
     Triangle.h Triangle.cpp
     Shader.h
+    NormalShader.h NormalShader.cpp
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 

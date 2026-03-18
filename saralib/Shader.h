@@ -8,5 +8,5 @@
 
 class Shader{
     public:
-        virtual vec3 rayColor(const HitStructure &h) = 0;
+        virtual vec3 rayColor(const HitStruct& hit) = 0;
 };
