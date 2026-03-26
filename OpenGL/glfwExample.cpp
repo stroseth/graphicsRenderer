@@ -61,7 +61,7 @@ int main(void)
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(1.0, 0.3, 1.0, 1.0);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0);
 
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
@@ -89,9 +89,9 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
     //triangle data that will be copied to GPU mem
-    std::vector<float> host_VertexBuffer { -0.2f, -0.5f, 0.0f, //v0
-                                            0.5f, -0.65f, 0.0f, //v1
-                                            0.1f, 0.2f, 0.0f }; //v2
+    std::vector<float> host_VertexBuffer { -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.2f, //v0 
+                                            0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, //v1 
+                                            0.5f, 0.5f, 0.0f, 0.0f, 0.5f, 1.0f }; //v2 
     int numBytes = host_VertexBuffer.size() * sizeof(float);
 
     //copy numBytes from host_VertexBuffer to the GPU and store in currently bound VBO
@@ -114,7 +114,12 @@ int main(void)
     //VAO details
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), 0);
+
+    //attribute 0: position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
+    
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
     glBindVertexArray(0);
 
     /**************************************  
@@ -123,8 +128,8 @@ int main(void)
  
     //create shader using Dr. Pete's GLSLObject class
     sivelab::GLSLObject shader;
-    shader.addShader("vertexShader_passthrough.glsl", sivelab::GLSLObject::VERTEX_SHADER);
-    shader.addShader("fragmentShader_passthrough.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.addShader("vertexShader_color.glsl", sivelab::GLSLObject::VERTEX_SHADER);
+    shader.addShader("fragmentShader_color.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
     
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
