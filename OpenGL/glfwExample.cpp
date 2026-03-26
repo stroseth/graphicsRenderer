@@ -61,7 +61,7 @@ int main(void)
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    glClearColor(0.0, 0.7, 1.0, 1.0);
+    glClearColor(1.0, 0.3, 1.0, 1.0);
 
     int fb_width, fb_height;
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
@@ -89,9 +89,9 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
     //triangle data that will be copied to GPU mem
-    std::vector<float> host_VertexBuffer { -0.5f, -0.5f, 0.0f, //v0
-                                            0.5f, -0.5f, 0.0f, //v1
-                                            0.0f, 0.5f, 0.0f }; //v2
+    std::vector<float> host_VertexBuffer { -0.2f, -0.5f, 0.0f, //v0
+                                            0.5f, -0.65f, 0.0f, //v1
+                                            0.1f, 0.2f, 0.0f }; //v2
     int numBytes = host_VertexBuffer.size() * sizeof(float);
 
     //copy numBytes from host_VertexBuffer to the GPU and store in currently bound VBO
