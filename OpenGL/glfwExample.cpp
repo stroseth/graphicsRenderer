@@ -143,10 +143,18 @@ int main(void)
  
     //create shader using Dr. Pete's GLSLObject class
     sivelab::GLSLObject shader;
-    shader.addShader("vertexShader_color.glsl", sivelab::GLSLObject::VERTEX_SHADER);
+    shader.addShader("vertexShader_withMatrixTransformation.glsl", sivelab::GLSLObject::VERTEX_SHADER);
     shader.addShader("fragmentShader_color.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
+
+    GLuint projMatrixID, viewMatrixID;
+    projMatrixID = shader.createUniform("projMatrix");
+    viewMatrixID = shader.createUniform("viewMatrix");
     
+    /****** Hardcoded camera **/
+    glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
+    glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
+
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
     
     /* Loop until the user closes the window */
@@ -160,8 +168,16 @@ int main(void)
         // background color)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        //create view matrix from camera data
+        glm::mat4 M_view = glm::lookAt( m_pos, m_pos - m_W, m_V);
+
         /* Render your objects here */
         shader.activate();
+
+            //copy view and proj matrices from host to device
+        glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr(M_ortho));
+        glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
+        
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
