@@ -75,6 +75,21 @@ int main(void)
     float halfHeight = halfWidth / aspectRatio;
     glm::mat4 projectionMatrix = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, -10.0f, 10.0f);
 
+    /**************************************  
+        CREATE ORTHOGRAPHIC MATRIX (hardcoded for now)
+    ***************************************/
+    float left = -halfWidth;
+    float right = halfWidth;
+
+    float bottom = -halfWidth; //using halfwidth so it's not divided by aspect ratio
+    float top = halfWidth; //using halfwidth so it's not divided by aspect ratio
+
+    float near = 5.0f;
+    float far = -5.0f;
+
+    glm::mat4 M_ortho = glm::ortho(left, right, bottom, top, near, far);
+
+    // *** Couts version to console
     GLint major_version;
     glGetIntegerv(GL_MAJOR_VERSION, &major_version);
     std::cout << "GL_MAJOR_VERSION: " << major_version << std::endl;
@@ -89,9 +104,9 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
     //triangle data that will be copied to GPU mem
-    std::vector<float> host_VertexBuffer { -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.2f, //v0 
-                                            0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, //v1 
-                                            0.5f, 0.5f, 0.0f, 0.0f, 0.5f, 1.0f }; //v2 
+    std::vector<float> host_VertexBuffer { -3.0f, -3.0f, 0.0f, 1.0f, 1.0f, 0.2f, //v0 
+                                            3.0f, -3.0f, 0.0f, 0.0f, 1.0f, 1.0f, //v1 
+                                            0.0f, 3.0f, 0.0f, 0.0f, 0.5f, 1.0f }; //v2 
     int numBytes = host_VertexBuffer.size() * sizeof(float);
 
     //copy numBytes from host_VertexBuffer to the GPU and store in currently bound VBO
