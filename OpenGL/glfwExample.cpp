@@ -89,6 +89,16 @@ int main(void)
 
     glm::mat4 M_ortho = glm::ortho(left, right, bottom, top, near, far);
 
+    //GLM Perspective Matrix: (FOVy in radians)
+    glm::mat4 perspMat = glm::perspective(glm::radians(45.0f), aspectRatio, near, far);
+
+    //GLM transform matrix
+    //glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(x,y,z));
+
+    //rotation
+    //glm::mat4 rot = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0,0,1));
+//    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(sx,sy,sz));
+
     // *** Couts version to console
     GLint major_version;
     glGetIntegerv(GL_MAJOR_VERSION, &major_version);
@@ -150,7 +160,8 @@ int main(void)
     GLuint projMatrixID, viewMatrixID;
     projMatrixID = shader.createUniform("projMatrix");
     viewMatrixID = shader.createUniform("viewMatrix");
-    
+    //modelMatrixID = shader.createUniform("modelMatrix");
+
     /****** Hardcoded camera **/
     glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
     glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
@@ -175,8 +186,9 @@ int main(void)
         shader.activate();
 
             //copy view and proj matrices from host to device
-        glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr(M_ortho));
+        glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr(perspMat));
         glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
+        //glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(perspMat));
         
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
