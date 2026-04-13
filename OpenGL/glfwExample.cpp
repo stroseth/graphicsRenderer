@@ -92,12 +92,13 @@ int main(void)
     //GLM Perspective Matrix: (FOVy in radians)
     glm::mat4 perspMat = glm::perspective(glm::radians(45.0f), aspectRatio, near, far);
 
-    //GLM transform matrix
-    //glm::mat4 trans = glm::translate(glm::mat4(1.0f), glm::vec3(x,y,z));
-
+    //GLM Model Matrix:
+    glm::mat4 modelMatrix = glm::mat4(1.0); //Identity matrix
+    modelMatrix = glm::translate(modelMatrix, glm::vec3(0.0f, 1.0f, 0.0f)); //translate matrix
+    float rot = glm::radians(0.0f);
     //rotation
-    //glm::mat4 rot = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0,0,1));
-//    glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(sx,sy,sz));
+    modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
+    //glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(sx,sy,sz));
 
     // *** Couts version to console
     GLint major_version;
@@ -157,17 +158,18 @@ int main(void)
     shader.addShader("fragmentShader_color.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
-    GLuint projMatrixID, viewMatrixID;
+    GLuint projMatrixID, viewMatrixID, modelMatrixID;
     projMatrixID = shader.createUniform("projMatrix");
     viewMatrixID = shader.createUniform("viewMatrix");
-    //modelMatrixID = shader.createUniform("modelMatrix");
+    modelMatrixID = shader.createUniform("modelMatrix");
 
     /****** Hardcoded camera **/
     glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
     glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
 
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
-    
+//    float radianRotate = glm::radians(0.0f);
+
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -185,10 +187,10 @@ int main(void)
         /* Render your objects here */
         shader.activate();
 
-            //copy view and proj matrices from host to device
+        //copy view and proj matrices from host to device
         glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr(perspMat));
         glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
-        //glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(perspMat));
+        glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -222,6 +224,10 @@ int main(void)
         if (glfwGetKey( window, GLFW_KEY_ESCAPE ) == GLFW_PRESS) {
             glfwSetWindowShouldClose(window, 1);
         }
+
+        rot = rot + glm::radians(10.0f);
+        modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
+        
     }
   
     glfwTerminate();
