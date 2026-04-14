@@ -12,6 +12,8 @@
 
 #include "GLSL.h"
 
+#include "Camera.h"
+
 int CheckGLErrors(const char *s)
 {
     int errCount = 0;
@@ -71,13 +73,15 @@ int main(void)
     // by the window frame.
     //
     // The ortho parameters, in order: left, right, bottom, top, zNear, zFar
+
+/*
     float halfWidth = 15.0 / 2.0;
     float halfHeight = halfWidth / aspectRatio;
     glm::mat4 projectionMatrix = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, -10.0f, 10.0f);
 
     /**************************************  
         CREATE ORTHOGRAPHIC MATRIX (hardcoded for now)
-    ***************************************/
+    ***************************************
     float left = -halfWidth;
     float right = halfWidth;
 
@@ -91,6 +95,8 @@ int main(void)
 
     //GLM Perspective Matrix: (FOVy in radians)
     glm::mat4 perspMat = glm::perspective(glm::radians(45.0f), aspectRatio, near, far);
+***/
+
 
     //GLM Model Matrix:
     glm::mat4 modelMatrix = glm::mat4(1.0); //Identity matrix
@@ -163,12 +169,10 @@ int main(void)
     viewMatrixID = shader.createUniform("viewMatrix");
     modelMatrixID = shader.createUniform("modelMatrix");
 
-    /****** Hardcoded camera **/
-    glm::vec3 m_pos(0,0,0), m_viewDir(0,0,-1);
-    glm::vec3 m_U(1,0,0), m_V(0,1,0), m_W(0,0,1);
+    Camera cam;
+    glm::mat4 M_proj = cam.getPerspectiveMatrix();
 
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
-//    float radianRotate = glm::radians(0.0f);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -182,13 +186,13 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //create view matrix from camera data
-        glm::mat4 M_view = glm::lookAt( m_pos, m_pos - m_W, m_V);
+        glm::mat4 M_view = cam.getViewMatrix();
 
         /* Render your objects here */
         shader.activate();
 
         //copy view and proj matrices from host to device
-        glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr(perspMat));
+        glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr(M_proj));
         glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
         glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         
@@ -206,16 +210,20 @@ int main(void)
             //Moving camera support!
         float moveRatePerFrame = 0.05;
         if (glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS) {
-            m_pos = m_pos + -m_W * moveRatePerFrame;
+            cam.setPosition(cam.getPosition() + -cam.getW() * moveRatePerFrame);
+//            m_pos = m_pos + -m_W * moveRatePerFrame;
         }
         if (glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS) {
-            m_pos = m_pos - m_U * moveRatePerFrame;
+            cam.setPosition(cam.getPosition() - cam.getU() * moveRatePerFrame);
+//            m_pos = m_pos - m_U * moveRatePerFrame;
         }
         if (glfwGetKey( window, GLFW_KEY_S ) == GLFW_PRESS) {
-            m_pos = m_pos + m_W * moveRatePerFrame;
+            cam.setPosition(cam.getPosition() + cam.getW() * moveRatePerFrame);
+//            m_pos = m_pos + m_W * moveRatePerFrame;
         }
         if (glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS) {
-            m_pos = m_pos + m_U * moveRatePerFrame;
+            cam.setPosition(cam.getPosition() + cam.getU() * moveRatePerFrame);
+//            m_pos = m_pos + m_U * moveRatePerFrame;
         }
         
         if (glfwGetKey( window, GLFW_KEY_T ) == GLFW_PRESS) {
