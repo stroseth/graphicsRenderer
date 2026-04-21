@@ -10,6 +10,7 @@ class Camera{
         Camera(int pixel_nx, int pixel_ny); //input pixel image dimensions
         Camera(vec3 origin , vec3 viewdir , float focalLength , float imagePlaneWidth , float imagePlaneHeight, int pixel_nx, int pixel_ny);
         virtual ray generateRay(int i, int j) = 0;
+        virtual ray generateRay(float i, float j) = 0;
         vec3 getPosition() { return pos; }
 
     protected:

@@ -20,6 +20,8 @@ public:
     return tempRay;
   }
 
+  ray generateRay(float i, float j) override;
+
 private:
   float l, r, b, t;
 };
