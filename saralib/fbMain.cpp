@@ -25,12 +25,12 @@ float randomOffset(){
 
 int main(int argc, char *argv[])
 {
-  Framebuffer fb(400, 400);
+  Framebuffer fb(800, 800);
 
   std::vector<std::shared_ptr<Shape>> shapes;
 
   // Default Camera: focal length = 0.7, image plane width = 0.5
-  PerspectiveCamera cam(vec3(0, 0, 0), vec3(0, 0, -1), 1.0, 0.5, 0.5, 400, 400);
+  PerspectiveCamera cam(vec3(0, 3.0, 4.0), vec3(0, -1.5, -3.0), 0.4, 0.5, 0.5, 800, 800);
 
   //create shaders
   auto lambertianShader = std::make_shared<LambertianShader>();
@@ -39,10 +39,11 @@ int main(int argc, char *argv[])
   blinnPhongShader->setEyePosition(cam.getPosition());
 
   //Make shapes
+  shapes.push_back(std::make_shared<Triangle>(vec3(20,-20,0.0), vec3(0.0,0.0,0.0), vec3(-20,-20,0.0),  vec3(0.5,0.5,0.5), lambertianShader));
   shapes.push_back(std::make_shared<Sphere>(
-    vec3(0, 0, -2.5), 0.5f, vec3(0.3, 0.8, 0.3), blinnPhongShader));
+    vec3(-1.2,1.0,-4.0), 1.0f, vec3(1.0, 0.0, 0.0), blinnPhongShader));
  shapes.push_back(std::make_shared<Sphere>(
-    vec3(0, 0, -1), 0.1f, vec3(0.3, 0.0, 0.3), mirrorShader));
+    vec3(1.2, 1.10, -4.0), 1.1f, vec3(0.3, 0.0, 0.3), mirrorShader));
 
 
   //Make light
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  fb.exportAsPNG("4antialias.png");
+  fb.exportAsPNG("lab6scene2.png");
 
   return 0;
 }
