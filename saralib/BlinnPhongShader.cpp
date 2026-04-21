@@ -1,7 +1,7 @@
 #include "BlinnPhongShader.h"
 #include "Shape.h"
 
-vec3 BlinnPhongShader::rayColor(const HitStruct& h, const std::vector<std::shared_ptr<PointLight>>& lights){
+vec3 BlinnPhongShader::rayColor(const HitStruct& hit, const ray &r, const std::vector<std::shared_ptr<PointLight>>& lights, const std::vector<std::shared_ptr<Shape>> &shapes, int depth){
     vec3 materialColor = h.shape->getColor();
     vec3 color = vec3(0.0, 0.0, 0.0);
 

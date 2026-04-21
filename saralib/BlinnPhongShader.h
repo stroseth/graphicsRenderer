@@ -10,7 +10,11 @@
 //This shader computes color based on the angle between the surface normal and light direction
 class BlinnPhongShader : public Shader {
     public:
-        vec3 rayColor(const HitStruct& h, const std::vector<std::shared_ptr<PointLight>>& lights) override;
+        vec3 rayColor(const HitStruct& hit,
+            const ray &r,
+            const std::vector<std::shared_ptr<PointLight>>& lights,
+            const std::vector<std::shared_ptr<Shape>> &shapes,
+            int depth) override;
         void setEyePosition(const vec3& pos) { eyePos = pos; }
 
     private:
