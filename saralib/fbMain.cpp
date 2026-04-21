@@ -11,6 +11,7 @@
 #include "NormalShader.h"
 #include "PointLight.h"
 #include "LambertianShader.h"
+#include "BlinnPhongShader.h"
 
 vec3 computeRayColor(const ray &r, const std::vector<std::shared_ptr<Shape>> &shapes, const std::vector<std::shared_ptr<PointLight>> &lights)
 {
@@ -38,7 +39,7 @@ vec3 computeRayColor(const ray &r, const std::vector<std::shared_ptr<Shape>> &sh
     if (shader) {
       return shader->rayColor(closestHit, lights);
     } else {
-      LambertianShader defaultShader;
+      BlinnPhongShader defaultShader;
       return defaultShader.rayColor(closestHit, lights);
     }
   }
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  fb.exportAsPNG("lambertTest.png");
+  fb.exportAsPNG("blinnPTest.png");
 
   return 0;
 }
