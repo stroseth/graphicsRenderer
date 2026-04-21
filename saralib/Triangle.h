@@ -2,6 +2,9 @@
 
 #include "vec3.h"
 #include "Shape.h"
+#include <memory>
+
+class Shader;
 
 class Triangle : public Shape{
     public:
@@ -12,8 +15,11 @@ class Triangle : public Shape{
         bool intersect(const ray& r, float t_min, float& t_max, HitStruct& hit) const override;
         vec3 getColor() const override;
 
+        std::shared_ptr<Shader> getShader() const override;
+        void setShader(std::shared_ptr<Shader> shd);
+
     private:
         point3 vertex_a, vertex_b, vertex_c;
-
         vec3 color;
+        std::shared_ptr<Shader> shader = nullptr;
 };

@@ -62,6 +62,13 @@ bool Triangle::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit
     t_max = t;
     hit.t = t;
     hit.point = r.at(t);
+
+    //calculate surface normal
+    vec3 u = vertex_b - vertex_a;
+    vec3 v = vertex_c - vertex_a;
+    vec3 crss_uv = cross(u,v);
+
+    hit.normal = unit_vector(crss_uv);
     hit.shape = this;
 
     return true;
@@ -69,4 +76,12 @@ bool Triangle::intersect(const ray& r, float t_min, float& t_max, HitStruct& hit
 
 vec3 Triangle::getColor() const {
     return color;
+}
+
+std::shared_ptr<Shader> Triangle::getShader() const{
+    return shader;
+}
+
+void Triangle::setShader(std::shared_ptr<Shader> shd){
+    shader = shd;
 }
