@@ -10,8 +10,10 @@ add_library (saralib
     HitStruct.h 
     Sphere.h Sphere.cpp 
     Triangle.h Triangle.cpp
+    PointLight.h
     Shader.h
     NormalShader.h NormalShader.cpp
+    LambertianShader.h LambertianShader.cpp
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 
