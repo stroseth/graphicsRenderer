@@ -15,18 +15,33 @@ vec3 BlinnPhongShader::rayColor(const HitStruct& h, const ray &r, const std::vec
     vec3 V = unit_vector(eyePos - h.point);
 
     for (const auto& light : lights){
-        vec3 L = unit_vector(light->getPosition() - h.point); //calculate light dir from hit point toward light
+        vec3 lightPos = light->getPosition();
+        vec3 L = unit_vector(lightPos - h.point); //calculate light dir from hit point toward light
         vec3 H = unit_vector(L + V); //half-vector (bisector btwn light and view)
 
-        //diffuse term: L = kd* I * max(0, n dot l)
-        float diff = std::max(dot(h.normal, L), 0.0f);
-        vec3 diffuse = kd * diff * light->getColor() * light->getIntensity();
+        bool inShadow = false;
+        ray shadowRay(h.point, L);
+        float distanceToLight = (lightPos - h.point).length();
 
-        //specular term: L = ks * I * max(0, n dot h) ^ p
-        float spec = std::pow(std::max(dot(h.normal, H), 0.0f), p);
-        vec3 specular = ks * spec * light->getColor() * light->getIntensity();
+        for (const auto& shape : shapes){
+            HitStruct shadowHit;
+            if (shape->intersect(shadowRay, 0.001f, distanceToLight, shadowHit)){
+                inShadow = true;
+                break;
+            }
+        }
 
-        color += diffuse * materialColor + specular;
+        if (!inShadow){
+            //diffuse term: L = kd* I * max(0, n dot l)
+            float diff = std::max(dot(h.normal, L), 0.0f);
+            vec3 diffuse = kd * diff * light->getColor() * light->getIntensity();
+
+            //specular term: L = ks * I * max(0, n dot h) ^ p
+            float spec = std::pow(std::max(dot(h.normal, H), 0.0f), p);
+            vec3 specular = ks * spec * light->getColor() * light->getIntensity();
+
+            color += diffuse * materialColor + specular;
+        }
     }
 
     //clamp to [0,1]

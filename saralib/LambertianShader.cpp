@@ -8,9 +8,25 @@ vec3 LambertianShader::rayColor(const HitStruct& h, const ray &r, const std::vec
     vec3 color(0.0, 0.0, 0.0);
 
     for (const auto& light : lights){
-        vec3 lightDir = unit_vector(light->getPosition() - h.point); // Compute the light direction from the hit point toward the light
-        float diff = std::max(dot(h.normal, lightDir), 0.0f); // Calculate the diffuse coefficient
-        color += diff * light->getColor() * light->getIntensity(); // Accumulate the light contribution
+        vec3 lightPos = light->getPosition();
+        vec3 lightDir = unit_vector(lightPos - h.point); // Compute the light direction from the hit point toward the light
+        
+        bool inShadow = false;
+        ray shadowRay(h.point, lightDir);
+        float distanceToLight = (lightPos - h.point).length();
+        
+        for (const auto &shape : shapes){
+            HitStruct shadowHit;
+            if (shape->intersect(shadowRay, 0.001f, distanceToLight, shadowHit)){
+                inShadow = true;
+                break;
+            }
+        }
+
+        if (!inShadow){
+            float diff = std::max(dot(h.normal, lightDir), 0.0f); // Calculate the diffuse coefficient
+            color += diff * light->getColor() * light->getIntensity(); // Accumulate the light contribution
+        }
     }
     
     //Multiply the accumulated lighting by the material color

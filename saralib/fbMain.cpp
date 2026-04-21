@@ -31,6 +31,9 @@ int main(int argc, char *argv[])
   //Make shapes
   shapes.push_back(std::make_shared<Sphere>(
     vec3(0, 0, -2.5), 0.5f, vec3(0.3, 0.8, 0.3), blinnPhongShader));
+ shapes.push_back(std::make_shared<Sphere>(
+    vec3(0, 0, -1), 0.1f, vec3(0.3, 0.0, 0.3), blinnPhongShader));
+
 
   //Make light
   std::vector<std::shared_ptr<PointLight>> lights;
@@ -45,7 +48,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  fb.exportAsPNG("recursion.png");
+  fb.exportAsPNG("shadowRays.png");
 
   return 0;
 }
