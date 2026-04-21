@@ -1,3 +1,47 @@
+## THIS BUILD: Status
+All modified files for the ray tracer are within the ``saralib`` directory. Assuming setup is completed and it built, to run the ray tracer from the ``buildVCPkg`` directory, execute the following commands:
+
+```
+cd saralib
+./main
+```
+
+To run the rasterizer from the ``buildVCPkg`` dir:
+```
+cd OpenGL
+./glfwExample
+```
+
+## Current Progress
+6 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯▯▯ ] 60%
+
+□ BRONZE CHECKPOINT  
+□ SILVER CHECKPOINT  
+□ GOLD CHECKPOINT 
+
+### Ray Tracer Progress
+4 / 6 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯ ] 66 %
+
+*Recently completed:*  
+⠀✓⠀ Lambertian/Blinn-Phong Shaders
+
+*To-do:*  
+⠀□⠀ Scene Class  
+⠀□⠀ LAB: Mirror Shader / Anti-aliasing  
+⠀□⠀ LAB: JSON Parsing / Scene Loader  
+
+### Rasterizer Progress
+2 / 4 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯▯▯▯▯ ] 50 %
+
+*Recently Completed:*  
+⠀✓⠀ LAB: OpenGL Matrices
+
+*To-do:*  
+⠀□⠀ LAB: GLSL Lambertian and Blinn-Phong Shaders  
+⠀□⠀ LAB: Texture Mapping with OpenGL  
+
+# First-time Build Instructions
+
 This project uses CMake and vcpkg for managing C++ dependencies. It serves as a simple example to test your build setup before we get into more complicted code.
 
 ## Building Using CMake Presets
