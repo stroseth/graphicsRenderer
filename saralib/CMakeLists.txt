@@ -14,6 +14,7 @@ add_library (saralib
     Shader.h
     NormalShader.h NormalShader.cpp
     LambertianShader.h LambertianShader.cpp
+    BlinnPhongShader.h BlinnPhongShader.cpp
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 
