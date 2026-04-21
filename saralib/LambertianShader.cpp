@@ -2,7 +2,7 @@
 #include "Shape.h"
 
 //  Computes color based on the angle between the surface normal and light direction
-vec3 LambertianShader::rayColor(const HitStruct& hit, const ray &r, const std::vector<std::shared_ptr<PointLight>>& lights, const std::vector<std::shared_ptr<Shape>> &shapes, int depth){
+vec3 LambertianShader::rayColor(const HitStruct& h, const ray &r, const std::vector<std::shared_ptr<PointLight>>& lights, const std::vector<std::shared_ptr<Shape>> &shapes, int depth){
     
     vec3 materialColor = h.shape->getColor();
     vec3 color(0.0, 0.0, 0.0);

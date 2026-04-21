@@ -12,7 +12,7 @@
 
 class NormalShader : public Shader{
     public:
-        vec3 rayColor(const HitStruct& hit,
+        vec3 rayColor(const HitStruct& h,
             const ray &r,
             const std::vector<std::shared_ptr<PointLight>>& lights,
             const std::vector<std::shared_ptr<Shape>> &shapes,

@@ -13,7 +13,7 @@
 //  * Description of materials associated w/ objects in the scene
 class Shader{
     public:
-        virtual vec3 rayColor(const HitStruct& hit,
+        virtual vec3 rayColor(const HitStruct& h,
             const ray &r,
             const std::vector<std::shared_ptr<PointLight>>& lights,
             const std::vector<std::shared_ptr<Shape>> &shapes,
