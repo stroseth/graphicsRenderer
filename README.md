@@ -13,21 +13,23 @@ cd OpenGL
 ```
 
 ## Current Progress
-6 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯▯▯ ] 60%
+7 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯ ] 70%
 
 □ BRONZE CHECKPOINT  
 □ SILVER CHECKPOINT  
 □ GOLD CHECKPOINT 
 
 ### Ray Tracer Progress
-4 / 6 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯ ] 66 %
+5 / 6 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯ ] 83 %
 
 *Recently completed:*  
-⠀✓⠀ Lambertian/Blinn-Phong Shaders
+⠀✓⠀ LAB: Lambertian/Blinn-Phong Shaders
+⠀✓⠀ LAB: Mirror Shader / Anti-aliasing  
 
 *To-do:*  
 ⠀□⠀ Scene Class  
-⠀□⠀ LAB: Mirror Shader / Anti-aliasing  
+⠀□⠀ Diffuse Shader  
+⠀□⠀ Command line arguments
 ⠀□⠀ LAB: JSON Parsing / Scene Loader  
 
 ### Rasterizer Progress
