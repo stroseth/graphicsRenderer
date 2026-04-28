@@ -16,6 +16,8 @@
 #include "BlinnPhongShader.h"
 #include "RayTracer.h"
 #include "MirrorShader.h"
+#include "DiffuseShader.h"
+#include "handleGraphicsArgs.h"
 
 float randomOffset(){
   static std::uniform_real_distribution<float> distribution(0.0, 1.0);
@@ -25,34 +27,47 @@ float randomOffset(){
 
 int main(int argc, char *argv[])
 {
-  Framebuffer fb(800, 800);
+  sivelab::GraphicsArgs arguments;
+  arguments.process(argc, argv);
 
+  Framebuffer fb(arguments.width, arguments.height);
+  float aspectRatio = arguments.aspectRatio;
+  std::string outputFileName = arguments.outputFileName + ".png";
+  int maxDepth = arguments.recursionDepth;
+  int rpp_NSquare = arguments.rpp;
+
+   // Camera setup
+  PerspectiveCamera cam(vec3(0, 3.0, 2.0), vec3(0, -1.5, -3.0), 0.4, 0.6, 0.6, fb.getFbWidth(), fb.getFbHeight());
+
+  // Create scene with spheres
   std::vector<std::shared_ptr<Shape>> shapes;
 
-  // Default Camera: focal length = 0.7, image plane width = 0.5
-  PerspectiveCamera cam(vec3(0, 3.0, 4.0), vec3(0, -1.5, -3.0), 0.4, 0.5, 0.5, 800, 800);
-
-  //create shaders
+  // Create shaders
   auto lambertianShader = std::make_shared<LambertianShader>();
   auto blinnPhongShader = std::make_shared<BlinnPhongShader>();
-  auto mirrorShader = std::make_shared<MirrorShader>();
   blinnPhongShader->setEyePosition(cam.getPosition());
-
-  //Make shapes
-  shapes.push_back(std::make_shared<Triangle>(vec3(20,-20,0.0), vec3(0.0,0.0,0.0), vec3(-20,-20,0.0),  vec3(0.5,0.5,0.5), lambertianShader));
-  shapes.push_back(std::make_shared<Sphere>(
-    vec3(-1.2,1.0,-4.0), 1.0f, vec3(1.0, 0.0, 0.0), blinnPhongShader));
- shapes.push_back(std::make_shared<Sphere>(
-    vec3(1.2, 1.10, -4.0), 1.1f, vec3(0.3, 0.0, 0.3), mirrorShader));
+  auto mirrorShader = std::make_shared<MirrorShader>();
+  auto diffuseGroundShader = std::make_shared<DiffuseShader>(vec3(0.8, 0.8, 0.8));
+  auto diffuse_redShader = std::make_shared<DiffuseShader>(vec3(1.0, 0.0, 0.0));
 
 
-  //Make light
+  // Create lights
   std::vector<std::shared_ptr<PointLight>> lights;
-  lights.push_back(std::make_shared<PointLight>());
+  lights.push_back(std::make_shared<PointLight>(vec3(3, 5, 2), vec3(1.0, 1.0, 1.0)));
+  lights.push_back(std::make_shared<PointLight>(vec3(-3, 5, 2), vec3(1.0, 1.0, 1.0)));
 
-  //antialiasing start
-  int rpp_NSquare = 4;
-  int maxDepth = 2;
+  // Ground plane: Diffuse shader
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(0, 0, 5), vec3(200, 0, -200), vec3(-200, 0, -200), vec3(0.8, 0.8, 0.8), diffuseGroundShader));
+
+  // Blue sphere: Lambertian shader
+  shapes.push_back(std::make_shared<Sphere>(
+    vec3(-2.5, 1.0, -4.0), 1.0f, vec3(0.0, 0.0, 1.0), lambertianShader));
+
+  // Green sphere: Blinn-Phong shader
+  shapes.push_back(std::make_shared<Sphere>(
+    vec3(0, 1.0, -5.0), 1.0f, vec3(0.0, 1.0, 0.0), blinnPhongShader));
+
 
   for (int x = 0; x < fb.getFbWidth(); x++) {
     for (int y = 0; y < fb.getFbHeight(); y++) {
@@ -74,7 +89,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  fb.exportAsPNG("lab6scene2.png");
+  fb.exportAsPNG(outputFileName);
 
   return 0;
 }
