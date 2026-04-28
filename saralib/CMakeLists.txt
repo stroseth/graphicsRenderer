@@ -17,6 +17,7 @@ add_library (saralib
     BlinnPhongShader.h BlinnPhongShader.cpp
     RayTracer.h RayTracer.cpp
     MirrorShader.h MirrorShader.cpp
+    DiffuseShader.h DiffuseShader.cpp
 )
 target_link_libraries(saralib PRIVATE cs4212-util)
 

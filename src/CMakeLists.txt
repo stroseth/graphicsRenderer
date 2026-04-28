@@ -2,11 +2,7 @@ add_library (cs4212-util
   ArgumentParsing.cpp ArgumentParsing.h
   handleGraphicsArgs.cpp handleGraphicsArgs.h
   model_obj.cpp model_obj.h
-  vec3.h
-  Framebuffer.h Framebuffer.cpp
-  ray.h
-  Camera.h Camera.cpp
-  PerspectiveCamera.h PerspectiveCamera.cpp
+  Random.h Random.cpp
 )
 
 target_compile_definitions(cs4212-util PUBLIC HAS_GLM)
