@@ -23,13 +23,13 @@ cd OpenGL
 5 / 6 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯ ] 83 %
 
 *Recently completed:*  
-⠀✓⠀ LAB: Lambertian/Blinn-Phong Shaders
+⠀✓⠀ LAB: Lambertian/Blinn-Phong Shaders  
 ⠀✓⠀ LAB: Mirror Shader / Anti-aliasing  
 
 *To-do:*  
 ⠀□⠀ Scene Class  
-⠀□⠀ Diffuse Shader  
-⠀□⠀ Command line arguments
+⠀✓⠀ Diffuse Shader  
+⠀□⠀ Command line arguments  
 ⠀□⠀ LAB: JSON Parsing / Scene Loader  
 
 ### Rasterizer Progress
