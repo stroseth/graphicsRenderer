@@ -17,6 +17,7 @@
 #include "RayTracer.h"
 #include "MirrorShader.h"
 #include "DiffuseShader.h"
+#include "handleGraphicsArgs.h"
 
 float randomOffset(){
   static std::uniform_real_distribution<float> distribution(0.0, 1.0);
@@ -26,10 +27,17 @@ float randomOffset(){
 
 int main(int argc, char *argv[])
 {
-  Framebuffer fb(800, 800);
+  sivelab::GraphicsArgs arguments;
+  arguments.process(argc, argv);
+
+  Framebuffer fb(arguments.width, arguments.height);
+  float aspectRatio = arguments.aspectRatio;
+  std::string outputFileName = arguments.outputFileName + ".png";
+  int maxDepth = arguments.recursionDepth;
+  int rpp_NSquare = arguments.rpp;
 
    // Camera setup
-  PerspectiveCamera cam(vec3(0, 3.0, 2.0), vec3(0, -1.5, -3.0), 0.4, 0.6, 0.6, 800, 800);
+  PerspectiveCamera cam(vec3(0, 3.0, 2.0), vec3(0, -1.5, -3.0), 0.4, 0.6, 0.6, fb.getFbWidth(), fb.getFbHeight());
 
   // Create scene with spheres
   std::vector<std::shared_ptr<Shape>> shapes;
@@ -60,18 +68,6 @@ int main(int argc, char *argv[])
   shapes.push_back(std::make_shared<Sphere>(
     vec3(0, 1.0, -5.0), 1.0f, vec3(0.0, 1.0, 0.0), blinnPhongShader));
 
-  // Red sphere: Diffuse shader
-  shapes.push_back(std::make_shared<Sphere>(
-    vec3(-1.3, 0.8, -1), 0.8f, vec3(1.0, 0.0, 0.0), diffuse_redShader));
-
-  // Mirror sphere: Mirror shader
-  shapes.push_back(std::make_shared<Sphere>(
-    vec3(1.5, 1.10, -2.5), 1.10f, vec3(0.8, 0.8, 0.8), mirrorShader));
-
-
-  //antialiasing start
-  int rpp_NSquare = 4;
-  int maxDepth = 4;
 
   for (int x = 0; x < fb.getFbWidth(); x++) {
     for (int y = 0; y < fb.getFbHeight(); y++) {
@@ -93,7 +89,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  fb.exportAsPNG("week6test.png");
+  fb.exportAsPNG(outputFileName);
 
   return 0;
 }
