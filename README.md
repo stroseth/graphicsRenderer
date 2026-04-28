@@ -29,7 +29,7 @@ cd OpenGL
 *To-do:*  
 ⠀□⠀ Scene Class  
 ⠀✓⠀ Diffuse Shader  
-⠀□⠀ Command line arguments  
+⠀✓⠀ Command line arguments  
 ⠀□⠀ LAB: JSON Parsing / Scene Loader  
 
 ### Rasterizer Progress
