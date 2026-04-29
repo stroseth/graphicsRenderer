@@ -30,15 +30,16 @@ int main(int argc, char *argv[])
   sivelab::GraphicsArgs arguments;
   arguments.process(argc, argv);
 
-  Framebuffer fb(arguments.width, arguments.height);
+  //Framebuffer fb(arguments.width, arguments.height);
+  Framebuffer fb(900, 750);
   float aspectRatio = arguments.aspectRatio;
   std::string outputFileName = arguments.outputFileName + ".png";
   int maxDepth = arguments.recursionDepth;
   int rpp_NSquare = arguments.rpp;
 
    // Camera setup
-  PerspectiveCamera cam(vec3(0, 3.0, 2.0), vec3(0, -1.5, -3.0), 0.4, 0.6, 0.6, fb.getFbWidth(), fb.getFbHeight());
-
+  PerspectiveCamera cam(vec3(-1.5, 2.5, 2.5), vec3(0, -.8, -3.0), 0.6, 1, 0.83, fb.getFbWidth(), fb.getFbHeight());
+  //PerspectiveCamera cam(vec3(0.0, 0.0, 0.0), vec3(0.0, 0.0, -3.0), 0.4, 0.6, 0.6, fb.getFbWidth(), fb.getFbHeight());
   // Create scene with spheres
   std::vector<std::shared_ptr<Shape>> shapes;
 
@@ -48,25 +49,80 @@ int main(int argc, char *argv[])
   blinnPhongShader->setEyePosition(cam.getPosition());
   auto mirrorShader = std::make_shared<MirrorShader>();
   auto diffuseGroundShader = std::make_shared<DiffuseShader>(vec3(0.8, 0.8, 0.8));
-  auto diffuse_redShader = std::make_shared<DiffuseShader>(vec3(1.0, 0.0, 0.0));
 
 
   // Create lights
   std::vector<std::shared_ptr<PointLight>> lights;
-  lights.push_back(std::make_shared<PointLight>(vec3(3, 5, 2), vec3(1.0, 1.0, 1.0)));
-  lights.push_back(std::make_shared<PointLight>(vec3(-3, 5, 2), vec3(1.0, 1.0, 1.0)));
+  lights.push_back(std::make_shared<PointLight>(vec3(3, 7, 2), vec3(1.0, 1.0, 1.0)));
+  lights.push_back(std::make_shared<PointLight>(vec3(0, 5, -4), vec3(1.0, 1.0, 1.0)));
 
   // Ground plane: Diffuse shader
   shapes.push_back(std::make_shared<Triangle>(
-    vec3(0, 0, 5), vec3(200, 0, -200), vec3(-200, 0, -200), vec3(0.8, 0.8, 0.8), diffuseGroundShader));
+    vec3(0, -1.0, 50), vec3(200, -1.0, -200), vec3(-200, -1.0, -200), vec3(0.8, 0.8, 0.8), diffuseGroundShader));
+  
+  //wall
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(-20,0,-4), vec3(20, 0, -4), vec3(-20, 10, -4), vec3(.9098,.9098,.9098), lambertianShader
+  ));
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(20,0,-4), vec3(20, 10, -4), vec3(-20, 10, -4), vec3(.9098,.9098,.9098), lambertianShader
+  ));
 
-  // Blue sphere: Lambertian shader
-  shapes.push_back(std::make_shared<Sphere>(
-    vec3(-2.5, 1.0, -4.0), 1.0f, vec3(0.0, 0.0, 1.0), lambertianShader));
+  //buge mirrore
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(-3, 0.0, -3.5), vec3(3, 0.0, -3.5), vec3(-3, 3, -3.5), vec3(1.0, 0.0, 0.0), mirrorShader
+  ));
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(3, 0.0, -3.5), vec3(3, 3, -3.5), vec3(-3, 3, -3.5), vec3(0.0,0.0,1.0), mirrorShader
+  ));
 
-  // Green sphere: Blinn-Phong shader
+  //mirror border
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(-3.2, 0.0, -3.5), vec3(3.2, 0.0, -3.5), vec3(-3.2, 3.2, -3.5), vec3(.5372, 0.318, 0.1608), blinnPhongShader
+  ));
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(3.2, 0.0, -3.5), vec3(3.2, 3.2, -3.5), vec3(-3.2, 3.2, -3.5), vec3(0.5372,0.318,0.1608), blinnPhongShader
+  ));
+
+  // Buge components
+    //head
   shapes.push_back(std::make_shared<Sphere>(
-    vec3(0, 1.0, -5.0), 1.0f, vec3(0.0, 1.0, 0.0), blinnPhongShader));
+    vec3(0,0,-1), 0.92f, vec3(1.0, 0.0, 0.0), blinnPhongShader));
+
+  for (int i = 0; i < 5; i++){
+  shapes.push_back(std::make_shared<Sphere>(
+    vec3(0,0,(0+i)), 1.0f, vec3(0.1, 1.0, 0.25), lambertianShader));
+  }
+
+    //oh yeah it's antennae time
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(-0.5,1.5,-1), vec3(-.4,1.5, -1), vec3(-.6, 0.0, -1), vec3(0.0, 1.0, 0.0), lambertianShader
+  )); //incorrect winding order here because i actually WANT the front of the buge to be at the mirror
+
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(0.5, 1.5, -1), vec3(.4, 1.5, -1), vec3(.6, 0.0, -1), vec3(0.0, 1.0, 0.0), lambertianShader
+  ));
+
+  shapes.push_back(std::make_shared<Sphere>(
+    vec3(0.5, 1.5, -1.05), 0.1f, vec3(0.1, 1.0, 0.25), blinnPhongShader));
+  shapes.push_back(std::make_shared<Sphere>(
+    vec3(-0.5, 1.5, -1.05), 0.1f, vec3(0.1, 1.0, 0.25), blinnPhongShader));
+
+    //another mirror?
+shapes.push_back(std::make_shared<Triangle>(
+    vec3(-3, 0.0, 7.5), vec3(-3, 3, 7.5), vec3(3, 0.0, 7.5), vec3(1.0, 0.0, 0.0), mirrorShader
+  ));
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(3, 0.0, 7.5), vec3(-3, 3, 7.5), vec3(3, 3, 7.5), vec3(0.0,0.0,1.0), mirrorShader
+  ));
+
+    //wall
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(-20,0,8), vec3(-20, 10, 8), vec3(20, 0, 8), vec3(.9098,.9098,.9098), lambertianShader
+  ));
+  shapes.push_back(std::make_shared<Triangle>(
+    vec3(20,0,8), vec3(-20, 10, 8), vec3(20, 10, 8), vec3(.9098,.9098,.9098), lambertianShader
+  ));
 
 
   for (int x = 0; x < fb.getFbWidth(); x++) {
