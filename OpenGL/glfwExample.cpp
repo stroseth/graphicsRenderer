@@ -120,10 +120,20 @@ int main(void)
     glGenBuffers(1, m_triangleVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
+    //normals..
+    glm::vec3 vertexA(-3.0f, -3.0f, 0.0f);
+    glm::vec3 vertexB(3.0f, -3.0f, 0.0f);
+    glm::vec3 vertexC(0.0f, 3.0f, 0.0f);
+
+    glm::vec3 u_vec = vertexB - vertexA;
+    glm::vec3 v_vec = vertexC - vertexA;
+
+    glm::vec3 normalVec = glm::normalize(glm::cross(u_vec, v_vec));
+
     //triangle data that will be copied to GPU mem
-    std::vector<float> host_VertexBuffer { -3.0f, -3.0f, 0.0f, 1.0f, 1.0f, 0.2f, //v0 
-                                            3.0f, -3.0f, 0.0f, 0.0f, 1.0f, 1.0f, //v1 
-                                            0.0f, 3.0f, 0.0f, 0.0f, 0.5f, 1.0f }; //v2 
+    std::vector<float> host_VertexBuffer { -3.0f, -3.0f, 0.0f, normalVec.x, normalVec.y, normalVec.z, //v0 
+                                            3.0f, -3.0f, 0.0f, normalVec.x, normalVec.y, normalVec.z, //v1 
+                                            0.0f, 3.0f, 0.0f, normalVec.x, normalVec.y, normalVec.z }; //v2 
     int numBytes = host_VertexBuffer.size() * sizeof(float);
 
     //copy numBytes from host_VertexBuffer to the GPU and store in currently bound VBO
