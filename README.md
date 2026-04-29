@@ -5,6 +5,21 @@ All modified files for the ray tracer are within the ``saralib`` directory. Assu
 cd saralib
 ./main
 ```
+The ray tracer takes command line argument support:
+```
+-o outputfilename
+-r rays per pixel
+-w image width
+-h image height
+-a aspect ratio
+- d recursion depth
+```
+to generate this bug scene:
+<img width="900" height="750" alt="image" src="https://github.com/user-attachments/assets/4766ff6d-8590-42f9-95e2-8500ccef7e5e" />
+
+type:
+```./main -o bug```
+the default width and height is 900*750 already.
 
 To run the rasterizer from the ``buildVCPkg`` dir:
 ```
@@ -15,7 +30,7 @@ cd OpenGL
 ## Current Progress
 7 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯ ] 70%
 
-□ BRONZE CHECKPOINT  
+✓ BRONZE CHECKPOINT  
 □ SILVER CHECKPOINT  
 □ GOLD CHECKPOINT 
 
