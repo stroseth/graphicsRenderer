@@ -120,20 +120,10 @@ int main(void)
     glGenBuffers(1, m_triangleVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
-    //normals..
-    glm::vec3 vertexA(-3.0f, -3.0f, 0.0f);
-    glm::vec3 vertexB(3.0f, -3.0f, 0.0f);
-    glm::vec3 vertexC(0.0f, 3.0f, 0.0f);
-
-    glm::vec3 u_vec = vertexB - vertexA;
-    glm::vec3 v_vec = vertexC - vertexA;
-
-    glm::vec3 normalVec = glm::normalize(glm::cross(u_vec, v_vec));
-
     //triangle data that will be copied to GPU mem
-    std::vector<float> host_VertexBuffer { -3.0f, -3.0f, 0.0f, normalVec.x, normalVec.y, normalVec.z, //v0 
-                                            3.0f, -3.0f, 0.0f, normalVec.x, normalVec.y, normalVec.z, //v1 
-                                            0.0f, 3.0f, 0.0f, normalVec.x, normalVec.y, normalVec.z }; //v2 
+    std::vector<float> host_VertexBuffer { -3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f, //v0 
+                                            3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f, //v1 
+                                            0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f }; //v2 
     int numBytes = host_VertexBuffer.size() * sizeof(float);
 
     //copy numBytes from host_VertexBuffer to the GPU and store in currently bound VBO
@@ -159,9 +149,11 @@ int main(void)
 
     //attribute 0: position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
-    
-    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(0);
+
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
+
     glBindVertexArray(0);
 
     /**************************************  
@@ -170,14 +162,22 @@ int main(void)
  
     //create shader using Dr. Pete's GLSLObject class
     sivelab::GLSLObject shader;
-    shader.addShader("vertexShader_withMatrixTransformation.glsl", sivelab::GLSLObject::VERTEX_SHADER);
-    shader.addShader("fragmentShader_color.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.addShader("vertexShader_PrepForPerFragment.glsl", sivelab::GLSLObject::VERTEX_SHADER);
+    shader.addShader("fragmentShader_lambertian.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
-    GLuint projMatrixID, viewMatrixID, modelMatrixID;
+    GLuint projMatrixID, viewMatrixID, modelMatrixID, normalMatrixID;
     projMatrixID = shader.createUniform("projMatrix");
     viewMatrixID = shader.createUniform("viewMatrix");
     modelMatrixID = shader.createUniform("modelMatrix");
+    normalMatrixID = shader.createUniform("normalMatrix");
+
+    // Create lights
+    //
+    //
+    glm::vec4 lightPosition(-4.0f, -4.0f, -0.5f, 1.0f);
+    GLint lightPosWorldID = shader.createUniform("lightPosWorld");
+    GLint diffuseComponentID = shader.createUniform("diffuseComponent");
 
     Camera cam;
     glm::mat4 M_proj = cam.getPerspectiveMatrix();
@@ -201,10 +201,17 @@ int main(void)
         /* Render your objects here */
         shader.activate();
 
+        glUniform4f(lightPosWorldID, 0.0f, 2.0f, 5.0f, 1.0f);
+
+        glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+
         //copy view and proj matrices from host to device
         glUniformMatrix4fv(projMatrixID, 1, GL_FALSE, glm::value_ptr(M_proj));
         glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
         glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+        glUniformMatrix4fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+        
+        glUniform3f(diffuseComponentID, 0.2f, 0.2f, 1.0f);
         
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -243,8 +250,8 @@ int main(void)
             glfwSetWindowShouldClose(window, 1);
         }
 
-        rot = rot + glm::radians(10.0f);
-        modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
+        //rot = rot + glm::radians(10.0f);
+        //modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
         
     }
   
