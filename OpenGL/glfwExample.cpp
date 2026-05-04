@@ -163,7 +163,7 @@ int main(void)
     //create shader using Dr. Pete's GLSLObject class
     sivelab::GLSLObject shader;
     shader.addShader("vertexShader_PrepForPerFragment.glsl", sivelab::GLSLObject::VERTEX_SHADER);
-    shader.addShader("fragmentShader_lambertian.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.addShader("fragmentShader_normal.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
     GLuint projMatrixID, viewMatrixID, modelMatrixID, normalMatrixID;
@@ -175,7 +175,6 @@ int main(void)
     // Create lights
     //
     //
-    glm::vec4 lightPosition(-4.0f, -4.0f, -0.5f, 1.0f);
     GLint lightPosWorldID = shader.createUniform("lightPosWorld");
     GLint diffuseComponentID = shader.createUniform("diffuseComponent");
 
@@ -201,7 +200,11 @@ int main(void)
         /* Render your objects here */
         shader.activate();
 
-        glUniform4f(lightPosWorldID, 0.0f, 2.0f, 5.0f, 1.0f);
+        glm::vec4 lightPosition(0.0f, 0.0f, 2.0f, 1.0f);
+        glm::vec3 diffuseComponent(0.0f, 0.0f, 1.0f);
+        
+        glUniform4fv(lightPosWorldID, 1, glm::value_ptr(lightPosition));
+        glUniform3fv(diffuseComponentID, 1, glm::value_ptr(diffuseComponent));
 
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelMatrix));
 
@@ -210,9 +213,7 @@ int main(void)
         glUniformMatrix4fv(viewMatrixID, 1, GL_FALSE, glm::value_ptr(M_view));
         glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
-        
-        glUniform3f(diffuseComponentID, 0.2f, 0.2f, 1.0f);
-        
+
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
