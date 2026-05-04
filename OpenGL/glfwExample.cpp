@@ -163,7 +163,7 @@ int main(void)
     //create shader using Dr. Pete's GLSLObject class
     sivelab::GLSLObject shader;
     shader.addShader("vertexShader_PrepForPerFragment.glsl", sivelab::GLSLObject::VERTEX_SHADER);
-    shader.addShader("fragmentShader_normal.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.addShader("fragmentShader_blinnPhong.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
     GLuint projMatrixID, viewMatrixID, modelMatrixID, normalMatrixID;
@@ -175,8 +175,10 @@ int main(void)
     // Create lights
     //
     //
-    GLint lightPosWorldID = shader.createUniform("lightPosWorld");
-    GLint diffuseComponentID = shader.createUniform("diffuseComponent");
+    GLuint lightPosWorldID = shader.createUniform("lightPosWorld");
+    GLuint diffuseComponentID = shader.createUniform("diffuseComponent");
+    GLuint specularComponentID = shader.createUniform("specularComponent");
+    GLuint shininessID = shader.createUniform("shininess");
 
     Camera cam;
     glm::mat4 M_proj = cam.getPerspectiveMatrix();
@@ -200,11 +202,14 @@ int main(void)
         /* Render your objects here */
         shader.activate();
 
-        glm::vec4 lightPosition(0.0f, 0.0f, 2.0f, 1.0f);
-        glm::vec3 diffuseComponent(0.0f, 0.0f, 1.0f);
+        glm::vec4 lightPosition(1.0f, 0.9f, 2.0f, 1.0f);
+        glm::vec3 diffuseComponent(1.0f, 0.0f, 1.0f);
+        glm::vec3 specularComponent(1.0f, 1.0f, 1.0f);
         
         glUniform4fv(lightPosWorldID, 1, glm::value_ptr(lightPosition));
         glUniform3fv(diffuseComponentID, 1, glm::value_ptr(diffuseComponent));
+        glUniform3fv(specularComponentID, 1, glm::value_ptr(specularComponent));
+        glUniform1f(shininessID, 32.0f);
 
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelMatrix));
 
@@ -251,8 +256,8 @@ int main(void)
             glfwSetWindowShouldClose(window, 1);
         }
 
-        //rot = rot + glm::radians(10.0f);
-        //modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
+        rot = rot + glm::radians(.001f);
+        modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
         
     }
   
