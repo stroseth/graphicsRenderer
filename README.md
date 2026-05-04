@@ -12,7 +12,7 @@ The ray tracer takes command line argument support:
 -w image width
 -h image height
 -a aspect ratio
-- d recursion depth
+-d recursion depth
 ```
 to generate this bug scene:
 <img width="900" height="750" alt="image" src="https://github.com/user-attachments/assets/4766ff6d-8590-42f9-95e2-8500ccef7e5e" />
@@ -48,13 +48,13 @@ cd OpenGL
 ⠀□⠀ LAB: JSON Parsing / Scene Loader  
 
 ### Rasterizer Progress
-2 / 4 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯▯▯▯▯▯ ] 50 %
+3 / 4 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯ ] 75 %
 
 *Recently Completed:*  
 ⠀✓⠀ LAB: OpenGL Matrices
 
 *To-do:*  
-⠀□⠀ LAB: GLSL Lambertian and Blinn-Phong Shaders  
+⠀✓⠀ LAB: GLSL Lambertian and Blinn-Phong Shaders  
 ⠀□⠀ LAB: Texture Mapping with OpenGL  
 
 # First-time Build Instructions
