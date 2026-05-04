@@ -28,7 +28,7 @@ cd OpenGL
 ```
 
 ## Current Progress
-7 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯▯ ] 70%
+8 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯ ] 80%
 
 ✓ BRONZE CHECKPOINT  
 □ SILVER CHECKPOINT  
