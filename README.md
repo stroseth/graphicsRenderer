@@ -51,10 +51,14 @@ cd OpenGL
 3 / 4 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯ ] 75 %
 
 *Recently Completed:*  
-⠀✓⠀ LAB: OpenGL Matrices
+⠀✓⠀ LAB: OpenGL Matrices  
+⠀✓⠀ LAB: GLSL Lambertian and Blinn-Phong Shaders  
 
 *To-do:*  
-⠀✓⠀ LAB: GLSL Lambertian and Blinn-Phong Shaders  
+⠀✓⠀ Interactive Camera  
+⠀□⠀ Scene Loader  
+⠀□⠀ Load triangle meshes (OBJ loader)  
+⠀□⠀ Spheres!  
 ⠀□⠀ LAB: Texture Mapping with OpenGL  
 
 # First-time Build Instructions
