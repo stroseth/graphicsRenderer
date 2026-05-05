@@ -14,6 +14,36 @@
 
 #include "Camera.h"
 
+float yaw = -90.0f;
+float pitch = 0.0f;
+float lastX = 500.0f, lastY = 500.0f;
+bool firstMouse = true;
+
+float sensitivity = 0.1f;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos){
+    if (firstMouse){
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (pitch > 89.0f) pitch = 89.0f;
+    if (pitch < -89.0f) pitch = -89.0f;
+}
+
+
 int CheckGLErrors(const char *s)
 {
     int errCount = 0;
@@ -157,6 +187,9 @@ int main(void)
     Camera cam;
     glm::mat4 M_proj = cam.getPerspectiveMatrix();
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouse_callback);
+
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
 
     /* Loop until the user closes the window */
@@ -169,6 +202,17 @@ int main(void)
         // Clear the window's buffer (or clear the screen to our
         // background color)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glm::vec3 front;
+        front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+        front.y = sin(glm::radians(pitch));
+        front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+
+        glm::vec3 m_W = -glm::normalize(front);
+        glm::vec3 m_U = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), m_W));
+        glm::vec3 m_V = glm::normalize(glm::cross(m_W, m_U));
+
+        cam.setUVW(m_U, m_V, m_W);
 
         //create view matrix from camera data
         glm::mat4 M_view = cam.getViewMatrix();

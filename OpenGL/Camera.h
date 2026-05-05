@@ -42,6 +42,16 @@ class Camera{
         glm::vec3 getV() { return m_V; }
         glm::vec3 getW() { return m_W; }
 
+        void setU(glm::vec3 u) { m_U = u; }
+        void setV(glm::vec3 v) { m_V = v; }
+        void setW(glm::vec3 w) { m_W = w; }
+
+        void setUVW(glm::vec3 u, glm::vec3 v, glm::vec3 w) { 
+            setU(u);
+            setV(v);
+            setW(w);
+         }
+
     private:
         glm::vec3 m_pos, m_viewDir;
         glm::vec3 m_U, m_V, m_W;
