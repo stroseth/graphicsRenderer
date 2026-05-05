@@ -100,6 +100,29 @@ int main(void)
     glViewport(0, 0, fb_width, fb_height);
 
     /**************************************  
+        TEXTURE MAPPING (FILE LOAD)
+    ****************************************/
+    std::string texFilename = "textureMap.png";
+    std::cout << "Reading texture map data from file: " << texFilename << std::endl;
+    png::image<png::rgb_pixel> texPNGImage;
+    texPNGImage.read(texFilename);
+
+    int pngWidth = texPNGImage.get_width();
+    int pngHeight = texPNGImage.get_height();
+
+    std::vector<float> texData(pngHeight * pngWidth * 3);
+
+    size_t idx = 0;
+    for (size_t row = 0; row < pngHeight; ++row){
+        for (size_t col = 0; col < pngWidth; ++col){
+            png::rgb_pixel pixel = texPNGImage[pngHeight - row - 1][col]; //flip of height here
+            texData[idx++] = pixel.red / 255.0f;
+            texData[idx++] = pixel.green / 255.0f;
+            texData[idx++] = pixel.blue / 255.0f;
+        }
+    }
+
+    /**************************************  
         CREATE MODEL MATRIX (Transforms)
     ****************************************/
 
@@ -190,9 +213,24 @@ int main(void)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
 
+    /**************************************  
+        LOAD TEXTURE INTO DEVICE MEMORY
+    ***************************************/
+    GLuint texID;
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pngWidth, pngHeight, 0, GL_RGB, GL_FLOAT, texData.data());
+    glBindTexture(GL_TEXTURE_2D, 0);
+
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
 
-    /* Loop until the user closes the window */
+    /*********************************************************  
+            RENDER LOOP!!! Until user closes window
+    *********************************************************/
     while (!glfwWindowShouldClose(window))
     {
         endFrameTime = glfwGetTime();
