@@ -33,7 +33,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    /* Create a windowed mode window and its OpenGL context */
+    /**************** Create a windowed mode window and its OpenGL context */
     int winWidth = 1000;
     float aspectRatio = 1.0; // 16.0 / 9.0; // winWidth / (float)winHeight;
     int winHeight = winWidth / aspectRatio;
@@ -46,7 +46,7 @@ int main(void)
         return -1;
     }
 
-    /* Make the window's context current */
+    /************ Make the window's context current */
     glfwMakeContextCurrent(window);
 
     glewExperimental = GL_TRUE;
@@ -69,34 +69,9 @@ int main(void)
     glfwGetFramebufferSize(window, &fb_width, &fb_height);
     glViewport(0, 0, fb_width, fb_height);
 
-    // Need to set a projection matrix that fits the aspect ratio set
-    // by the window frame.
-    //
-    // The ortho parameters, in order: left, right, bottom, top, zNear, zFar
-
-/*
-    float halfWidth = 15.0 / 2.0;
-    float halfHeight = halfWidth / aspectRatio;
-    glm::mat4 projectionMatrix = glm::ortho(-halfWidth, halfWidth, -halfHeight, halfHeight, -10.0f, 10.0f);
-
     /**************************************  
-        CREATE ORTHOGRAPHIC MATRIX (hardcoded for now)
-    ***************************************
-    float left = -halfWidth;
-    float right = halfWidth;
-
-    float bottom = -halfWidth; //using halfwidth so it's not divided by aspect ratio
-    float top = halfWidth; //using halfwidth so it's not divided by aspect ratio
-
-    float near = 5.0f;
-    float far = -5.0f;
-
-    glm::mat4 M_ortho = glm::ortho(left, right, bottom, top, near, far);
-
-    //GLM Perspective Matrix: (FOVy in radians)
-    glm::mat4 perspMat = glm::perspective(glm::radians(45.0f), aspectRatio, near, far);
-***/
-
+        CREATE MODEL MATRIX (Transforms)
+    ****************************************/
 
     //GLM Model Matrix:
     glm::mat4 modelMatrix = glm::mat4(1.0); //Identity matrix
@@ -106,7 +81,7 @@ int main(void)
     modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
     //glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(sx,sy,sz));
 
-    // *** Couts version to console
+    // *********************** Couts version to console
     GLint major_version;
     glGetIntegerv(GL_MAJOR_VERSION, &major_version);
     std::cout << "GL_MAJOR_VERSION: " << major_version << std::endl;
@@ -173,13 +148,12 @@ int main(void)
     normalMatrixID = shader.createUniform("normalMatrix");
 
     // Create lights
-    //
-    //
     GLuint lightPosWorldID = shader.createUniform("lightPosWorld");
     GLuint diffuseComponentID = shader.createUniform("diffuseComponent");
     GLuint specularComponentID = shader.createUniform("specularComponent");
     GLuint shininessID = shader.createUniform("shininess");
 
+    // Create Camera
     Camera cam;
     glm::mat4 M_proj = cam.getPerspectiveMatrix();
 
@@ -230,25 +204,21 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
         
-            //Moving camera support!
+            // ************** Moving camera support!
         float moveRatePerFrame = 0.05;
         if (glfwGetKey( window, GLFW_KEY_W ) == GLFW_PRESS) {
             cam.setPosition(cam.getPosition() + -cam.getW() * moveRatePerFrame);
-//            m_pos = m_pos + -m_W * moveRatePerFrame;
         }
         if (glfwGetKey( window, GLFW_KEY_A ) == GLFW_PRESS) {
             cam.setPosition(cam.getPosition() - cam.getU() * moveRatePerFrame);
-//            m_pos = m_pos - m_U * moveRatePerFrame;
+
         }
         if (glfwGetKey( window, GLFW_KEY_S ) == GLFW_PRESS) {
             cam.setPosition(cam.getPosition() + cam.getW() * moveRatePerFrame);
-//            m_pos = m_pos + m_W * moveRatePerFrame;
         }
         if (glfwGetKey( window, GLFW_KEY_D ) == GLFW_PRESS) {
             cam.setPosition(cam.getPosition() + cam.getU() * moveRatePerFrame);
-//            m_pos = m_pos + m_U * moveRatePerFrame;
         }
-        
         if (glfwGetKey( window, GLFW_KEY_T ) == GLFW_PRESS) {
             std::cout << "fps: " << 1.0/timeDiff << std::endl;
         }
@@ -256,8 +226,9 @@ int main(void)
             glfwSetWindowShouldClose(window, 1);
         }
 
+        /* Rotating triangle
         rot = rot + glm::radians(.001f);
-        modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0));
+        modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0)); */
         
     }
   
