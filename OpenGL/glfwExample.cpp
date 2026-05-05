@@ -43,12 +43,17 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos){
     if (pitch < -89.0f) pitch = -89.0f;
 }
 
-
 int CheckGLErrors(const char *s)
 {
     int errCount = 0;
     return errCount;
 }
+
+struct VertexData{
+    glm::vec3 pos;
+    glm::vec3 normal;
+    //glm::vec2 texCoord;
+};
 
 int main(void)
 {
@@ -101,7 +106,7 @@ int main(void)
 
     /**************************************  
         TEXTURE MAPPING (FILE LOAD)
-    ****************************************/
+    ****************************************
     std::string texFilename = "textureMap.png";
     std::cout << "Reading texture map data from file: " << texFilename << std::endl;
     png::image<png::rgb_pixel> texPNGImage;
@@ -140,25 +145,33 @@ int main(void)
     std::cout << "GL_MAJOR_VERSION: " << major_version << std::endl;
 
     /**************************************  
-        CREATE A VERTEX BUFFER OBJECT
+        CREATE A VERTEX BUFFER OBJECT (new struct)
     ***************************************/
-   
-    // create vertex array buffer to hold triangle data
+
     GLuint m_triangleVBO[1], m_VAO;
     glGenBuffers(1, m_triangleVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
-    //triangle data that will be copied to GPU mem
-    std::vector<float> host_VertexBuffer { -3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f, //v0 
-                                            3.0f, -3.0f, 0.0f, 0.0f, 0.0f, 1.0f, //v1 
-                                            0.0f, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f }; //v2 
-    int numBytes = host_VertexBuffer.size() * sizeof(float);
+    glm::vec3 triNormal = glm::vec3(0.0f, 0.0f, 1.0f);
 
-    //copy numBytes from host_VertexBuffer to the GPU and store in currently bound VBO
-    glBufferData(GL_ARRAY_BUFFER, numBytes, host_VertexBuffer.data(), GL_STATIC_DRAW);
+    VertexData v0;
+    v0.pos = glm::vec3(-3.0f, -3.0f, 0.0f);
+    v0.normal = triNormal;
+    VertexData v1;
+    v1.pos = glm::vec3(3.0f, -3.0f, 0.0f);
+    v1.normal = triNormal;
+    VertexData v2;
+    v2.pos = glm::vec3(0.0f, 3.0f, 0.0f);
+    v2.normal = triNormal;
+
+    std::vector<VertexData> modelData = {v0, v1, v2};
+
+    int numBytes = modelData.size() * sizeof(VertexData);
+    glBufferData(GL_ARRAY_BUFFER, numBytes, modelData.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    host_VertexBuffer.clear();    //once copied we can clear host data
+    int mdSize = modelData.size();
+    modelData.clear();    //can clear host data now
 
     /**************************************  
         CREATE A VERTEX ARRAY OBJECT
@@ -172,17 +185,35 @@ int main(void)
     glBindVertexArray(m_VAO);
 
     //VAO details
-    glEnableVertexAttribArray(0);
+    //glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
 
     //attribute 0: position
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), 0); //change to 8 offset when texture included
 
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
+    //attribute 1: normal
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (const GLvoid *)12);
+
+    //attribute 2: texture
 
     glBindVertexArray(0);
+
+    /**************************************  
+        LOAD TEXTURE INTO DEVICE MEMORY
+    ***************************************
+    GLuint texID;
+    glGenTextures(1, &texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pngWidth, pngHeight, 0, GL_RGB, GL_FLOAT, texData.data());
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    */
 
     /**************************************  
         CREATE SHADERS
@@ -212,19 +243,6 @@ int main(void)
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
-
-    /**************************************  
-        LOAD TEXTURE INTO DEVICE MEMORY
-    ***************************************/
-    GLuint texID;
-    glGenTextures(1, &texID);
-    glBindTexture(GL_TEXTURE_2D, texID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pngWidth, pngHeight, 0, GL_RGB, GL_FLOAT, texData.data());
-    glBindTexture(GL_TEXTURE_2D, 0);
 
     double timeDiff = 0.0, startFrameTime = 0.0, endFrameTime = 0.0;
 
@@ -276,7 +294,7 @@ int main(void)
         glUniformMatrix4fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
         glBindVertexArray(m_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, mdSize);
         glBindVertexArray(0);
         shader.deactivate();
 
