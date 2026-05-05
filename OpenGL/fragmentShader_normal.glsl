@@ -2,11 +2,10 @@
 
 layout(location=0) out vec4 fragmentColor;
 
-uniform vec3 diffuseComponent;
-
 in vec4 normal;
 
 void main(void)
 {
-  fragmentColor = vec4(normal);
+  vec3 intensity = normalize(normal.xyz) * 0.5 + 0.5;
+  fragmentColor = vec4(intensity, 1.0);
 }
