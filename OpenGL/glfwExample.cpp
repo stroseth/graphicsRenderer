@@ -9,6 +9,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "png++/png.hpp"
 
 #include "GLSL.h"
 
@@ -52,7 +53,7 @@ int CheckGLErrors(const char *s)
 struct VertexData{
     glm::vec3 pos;
     glm::vec3 normal;
-    //glm::vec2 texCoord;
+    glm::vec2 texCoord;
 };
 
 int main(void)
@@ -106,7 +107,7 @@ int main(void)
 
     /**************************************  
         TEXTURE MAPPING (FILE LOAD)
-    ****************************************
+    ****************************************/
     std::string texFilename = "textureMap.png";
     std::cout << "Reading texture map data from file: " << texFilename << std::endl;
     png::image<png::rgb_pixel> texPNGImage;
@@ -154,15 +155,19 @@ int main(void)
 
     glm::vec3 triNormal = glm::vec3(0.0f, 0.0f, 1.0f);
 
-    VertexData v0;
+    VertexData v0, v1, v2;
+
     v0.pos = glm::vec3(-3.0f, -3.0f, 0.0f);
     v0.normal = triNormal;
-    VertexData v1;
+    v0.texCoord = glm::vec2(1.0f, 0.0f);
+
     v1.pos = glm::vec3(3.0f, -3.0f, 0.0f);
     v1.normal = triNormal;
-    VertexData v2;
+    v1.texCoord = glm::vec2(0.0f, 0.0f);
+
     v2.pos = glm::vec3(0.0f, 3.0f, 0.0f);
     v2.normal = triNormal;
+    v2.texCoord = glm::vec2(0.5f, 1.0f);
 
     std::vector<VertexData> modelData = {v0, v1, v2};
 
@@ -190,19 +195,21 @@ int main(void)
 
     //attribute 0: position
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), 0); //change to 8 offset when texture included
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), 0); //change to 8 offset when texture included
 
     //attribute 1: normal
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(GLfloat), (const GLvoid *)12);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (const GLvoid *)12);
 
     //attribute 2: texture
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8*sizeof(GLfloat), (const GLvoid *)24);
 
     glBindVertexArray(0);
 
     /**************************************  
         LOAD TEXTURE INTO DEVICE MEMORY
-    ***************************************
+    ***************************************/
     GLuint texID;
     glGenTextures(1, &texID);
     glBindTexture(GL_TEXTURE_2D, texID);
@@ -211,9 +218,8 @@ int main(void)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, pngWidth, pngHeight, 0, GL_RGB, GL_FLOAT, texData.data());
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    */
+    //glBindTexture(GL_TEXTURE_2D, 0);
+    //glActiveTexture(GL_TEXTURE0);
 
     /**************************************  
         CREATE SHADERS
@@ -240,6 +246,9 @@ int main(void)
     // Create Camera
     Camera cam;
     glm::mat4 M_proj = cam.getPerspectiveMatrix();
+
+    //create texture
+    GLuint texUnitID = shader.createUniform("myTexture");
 
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -293,9 +302,17 @@ int main(void)
         glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
+        //Create textures
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texID);
+        glUniform1f(texUnitID, 0);
+
         glBindVertexArray(m_VAO);
         glDrawArrays(GL_TRIANGLES, 0, mdSize);
         glBindVertexArray(0);
+
+        
         shader.deactivate();
 
         // Swap the front and back buffers
@@ -333,9 +350,9 @@ int main(void)
             cam.setPosition(cam.getPosition() - cam.getV() * moveRatePerFrame);
         }
 
-        /* Rotating triangle
-        rot = rot + glm::radians(.001f);
-        modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0)); */
+        // Rotating triangle
+        //rot = rot + glm::radians(.001f);
+        //modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0)); 
         
     }
   
