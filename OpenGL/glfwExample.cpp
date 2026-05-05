@@ -226,6 +226,13 @@ int main(void)
             glfwSetWindowShouldClose(window, 1);
         }
 
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+            cam.setPosition(cam.getPosition() + cam.getV() * moveRatePerFrame);
+        }
+        if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+            cam.setPosition(cam.getPosition() - cam.getV() * moveRatePerFrame);
+        }
+
         /* Rotating triangle
         rot = rot + glm::radians(.001f);
         modelMatrix = glm::rotate(modelMatrix, rot, glm::vec3(0,1,0)); */

@@ -39,6 +39,7 @@ class Camera{
         glm::vec3 getPosition() { return m_pos; }
         glm::vec3 getViewDir() { return m_viewDir; }
         glm::vec3 getU() { return m_U; }
+        glm::vec3 getV() { return m_V; }
         glm::vec3 getW() { return m_W; }
 
     private:
