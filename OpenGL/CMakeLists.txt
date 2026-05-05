@@ -4,6 +4,7 @@ add_executable (glfwExample
   glfwExample.cpp 
   GLSL.cpp GLSL.h
   Camera.h Camera.cpp
+  tiny_obj_loader.h
 )
 
 target_link_libraries (glfwExample PRIVATE GLEW::GLEW)

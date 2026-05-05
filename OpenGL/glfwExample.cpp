@@ -1,3 +1,5 @@
+#define TINYOBJLOADER_IMPLEMENTATION
+
 #include <cstdlib>
 #include <iostream>
 #include <vector>
@@ -9,6 +11,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "tiny_obj_loader.h"
 
 #include "GLSL.h"
 
@@ -43,6 +46,12 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos){
     if (pitch < -89.0f) pitch = -89.0f;
 }
 
+class Vertex {
+public:
+    glm::vec3 position;
+    glm::vec3 normal;
+    glm::vec2 texCoord;
+};
 
 int CheckGLErrors(const char *s)
 {
@@ -100,6 +109,49 @@ int main(void)
     glViewport(0, 0, fb_width, fb_height);
 
     /**************************************  
+        LOAD OBJ FILE
+    ***************************************/
+    tinyobj::attrib_t attributes;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warnings;
+    std::string errors;
+    std::string filename = "cat.obj";
+    std::string dir = "models";
+
+    bool success = tinyobj::LoadObj(&attributes, &shapes, &materials, &warnings, &errors, filename.c_str(), dir.c_str());
+    std::vector<Vertex> vertices;
+
+    if (!success) std::cout << "FAILED TO LOAD MODEL \n";
+    if (success) std::cout << "Loaded model I think \n";
+
+    //Decompression
+    for (int i = 0; i < shapes.size(); i++) {
+        tinyobj::shape_t &shape = shapes.at(i);
+        tinyobj::mesh_t &mesh = shape.mesh;
+        for (int j = 0; j < mesh.indices.size(); j++) {
+            tinyobj::index_t i = mesh.indices.at(j);
+            glm::vec3 position = {
+                attributes.vertices[i.vertex_index * 3],
+                attributes.vertices[i.vertex_index * 3 + 1],
+                attributes.vertices[i.vertex_index * 3 + 2]
+            };
+            glm::vec3 normal = {
+                attributes.normals[i.normal_index * 3],
+                attributes.normals[i.normal_index * 3 + 1],
+                attributes.normals[i.normal_index * 3 + 2]
+            };
+            glm::vec2 texCoord = {
+                attributes.texcoords[i.texcoord_index * 2],
+                attributes.texcoords[i.texcoord_index * 2 + 1],
+            };
+        // Not gonna care about texCoord right now.
+            Vertex vert = { position, normal, texCoord };
+            vertices.push_back(vert);
+        }
+    }
+
+    /**************************************  
         CREATE MODEL MATRIX (Transforms)
     ****************************************/
 
@@ -117,10 +169,28 @@ int main(void)
     std::cout << "GL_MAJOR_VERSION: " << major_version << std::endl;
 
     /**************************************  
-        CREATE A VERTEX BUFFER OBJECT
+        CREATE A VERTEX BUFFER OBJECT (OBJ Scene)
+    ***************************************/
+    GLuint VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    GLuint VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, nullptr);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void *) (sizeof(float) * 3));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void *) (sizeof(float) * 6));
+
+    /**************************************  
+        CREATE A VERTEX BUFFER OBJECT (TRIANGLE)
     ***************************************/
    
-    // create vertex array buffer to hold triangle data
+    /* create vertex array buffer to hold triangle data
     GLuint m_triangleVBO[1], m_VAO;
     glGenBuffers(1, m_triangleVBO);
     glBindBuffer(GL_ARRAY_BUFFER, m_triangleVBO[0]);
@@ -133,7 +203,7 @@ int main(void)
 
     //copy numBytes from host_VertexBuffer to the GPU and store in currently bound VBO
     glBufferData(GL_ARRAY_BUFFER, numBytes, host_VertexBuffer.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
     host_VertexBuffer.clear();    //once copied we can clear host data
 
@@ -142,7 +212,7 @@ int main(void)
             (VAOs are mappings between VBO
             data and attribute locations
             that can be used in a shader)
-    ***************************************/
+    **************************************
     
     //create VAO mapping attributes in vertex buffer to different location attributes for shaders
     glGenVertexArrays(1, &m_VAO);
@@ -157,9 +227,9 @@ int main(void)
     glEnableVertexAttribArray(0);
 
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(1); 
 
-    glBindVertexArray(0);
+    glBindVertexArray(0); */ 
 
     /**************************************  
         CREATE SHADERS
@@ -237,9 +307,12 @@ int main(void)
         glUniformMatrix4fv(modelMatrixID, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(normalMatrixID, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-        glBindVertexArray(m_VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glBindVertexArray(0);
+        //glBindVertexArray(m_VAO);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        //glBindVertexArray(0);
         shader.deactivate();
 
         // Swap the front and back buffers
