@@ -28,7 +28,7 @@ cd OpenGL
 ```
 
 ## Current Progress
-8 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯ ] 80%
+9 / 10 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯ ] 90%
 
 ✓ BRONZE CHECKPOINT  
 □ SILVER CHECKPOINT  
@@ -48,18 +48,18 @@ cd OpenGL
 ⠀□⠀ LAB: JSON Parsing / Scene Loader  
 
 ### Rasterizer Progress
-3 / 4 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▯▯▯▯▯▯ ] 75 %
+4 / 4 Labs [ ▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮▮ ] 100 %
 
 *Recently Completed:*  
 ⠀✓⠀ LAB: OpenGL Matrices  
 ⠀✓⠀ LAB: GLSL Lambertian and Blinn-Phong Shaders  
+⠀✓⠀ LAB: Texture Mapping with OpenGL  
 
 *To-do:*  
 ⠀✓⠀ Interactive Camera  
 ⠀□⠀ Scene Loader  
 ⠀□⠀ Load triangle meshes (OBJ loader)  
 ⠀□⠀ Spheres!  
-⠀□⠀ LAB: Texture Mapping with OpenGL  
 
 # First-time Build Instructions
 
