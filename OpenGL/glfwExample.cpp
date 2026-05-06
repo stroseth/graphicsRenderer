@@ -108,7 +108,7 @@ int main(void)
     /**************************************  
         TEXTURE MAPPING (FILE LOAD)
     ****************************************/
-    std::string texFilename = "textureMap.png";
+    std::string texFilename = "textureAtlas.png";
     std::cout << "Reading texture map data from file: " << texFilename << std::endl;
     png::image<png::rgb_pixel> texPNGImage;
     texPNGImage.read(texFilename);
@@ -155,21 +155,60 @@ int main(void)
 
     glm::vec3 triNormal = glm::vec3(0.0f, 0.0f, 1.0f);
 
-    VertexData v0, v1, v2;
+    VertexData v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11;
 
     v0.pos = glm::vec3(-3.0f, -3.0f, 0.0f);
     v0.normal = triNormal;
-    v0.texCoord = glm::vec2(1.0f, 0.0f);
+    v0.texCoord = glm::vec2(0.0f, 0.5f);
 
     v1.pos = glm::vec3(3.0f, -3.0f, 0.0f);
     v1.normal = triNormal;
-    v1.texCoord = glm::vec2(0.0f, 0.0f);
+    v1.texCoord = glm::vec2(0.5f, 0.5f);
 
-    v2.pos = glm::vec3(0.0f, 3.0f, 0.0f);
+    v2.pos = glm::vec3(-3.0f, 3.0f, 0.0f);
     v2.normal = triNormal;
-    v2.texCoord = glm::vec2(0.5f, 1.0f);
+    v2.texCoord = glm::vec2(0.0f, 1.0f);
 
-    std::vector<VertexData> modelData = {v0, v1, v2};
+    //triangle2
+    v3.pos = v1.pos;
+    v3.normal = v1.normal;
+    v3.texCoord = v1.texCoord;
+
+    v4.pos = glm::vec3(3.0f, 3.0f, 0.0f);
+    v4.normal = triNormal;
+    v4.texCoord = glm::vec2(0.5f, 1.0f);
+
+    v5.pos = v2.pos;
+    v5.normal = v2.normal;
+    v5.texCoord = v2.texCoord;
+
+    ////side 2 of the square
+    v6.pos = glm::vec3(3.0f, -3.0f, 0.0f);
+    v6.normal = triNormal;
+    v6.texCoord = v1.texCoord;
+
+    v7.pos = glm::vec3(3.0f, -3.0f, -6.0f);
+    v7.normal = triNormal;
+    v7.texCoord = v6.texCoord + glm::vec2(0.5f, 0.0f);
+
+    v8.pos = glm::vec3(3.0f, 3.0f, 0.0f);
+    v8.normal = triNormal;
+    v8.texCoord = v6.texCoord + glm::vec2(0.0f, 0.5f);
+
+    //triangle2
+    v9.pos = v7.pos;
+    v9.normal = v7.normal;
+    v9.texCoord = v7.texCoord;
+
+    v10.pos = glm::vec3(3.0f, 3.0f, -6.0f);
+    v10.normal = triNormal;
+    v10.texCoord = glm::vec2(1.0f, 1.0f);
+
+    v11.pos = v8.pos;
+    v11.normal = v8.normal;
+    v11.texCoord = v8.texCoord;
+
+    std::vector<VertexData> modelData = {v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11};
 
     int numBytes = modelData.size() * sizeof(VertexData);
     glBufferData(GL_ARRAY_BUFFER, numBytes, modelData.data(), GL_STATIC_DRAW);
@@ -228,7 +267,7 @@ int main(void)
     //create shader using Dr. Pete's GLSLObject class
     sivelab::GLSLObject shader;
     shader.addShader("vertexShader_PrepForPerFragment.glsl", sivelab::GLSLObject::VERTEX_SHADER);
-    shader.addShader("fragmentShader_blinnPhong.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
+    shader.addShader("fragmentShader_flatTexture.glsl", sivelab::GLSLObject::FRAGMENT_SHADER);
     shader.createProgram();
 
     GLuint projMatrixID, viewMatrixID, modelMatrixID, normalMatrixID;
